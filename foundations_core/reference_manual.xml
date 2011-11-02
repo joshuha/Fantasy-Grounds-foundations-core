@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="referencemanualarticle">
+		<sizelimits>
+			<minimum>
+				<height>22</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<windowreferencefield name="listlink">
+				<bounds>0,0,20,20</bounds>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<description>
+					<field>name</field>
+				</description>
+				<invisible />
+			</windowreferencefield>
+			<stringfield name="name">
+				<bounds>0,0,-1,18</bounds>
+				<font>reference-article</font>
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+
+					function onClickRelease(button, x, y)
+						local myclass, myrecord = window.listlink.getValue();
+						local myarticlelist = window.windowlist.window.windowlist.window.windowlist.window.articletext;
+						myarticlelist.closeAll();
+						myarticlelist.createWindowWithClass(myclass, myrecord); 
+						
+						return true;
+					end
+				</script>
+			</stringfield>
+			<stringfield name="keywords">
+				<bounds>0,0,-1,15</bounds>
+				<font>sheetlabel</font>
+				<invisible />
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_manualtextwide">
+		<sizelimits>
+			<minimum>
+				<height>380</height>
+			</minimum>
+		</sizelimits>
+		<placement>
+			<height>380</height>
+		</placement>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<sheetdata>
+			<jpgreferencecontrol name="open">
+				<bounds>0,1,20,20</bounds>
+				<class>referencetextwide</class>
+			</jpgreferencecontrol>
+
+			<stringfield name="name">
+				<bounds>25,2,-25,20</bounds>
+				<font>reference-h</font>
+				<nodragselect />
+				<nodrag />
+				<static />
+			</stringfield>
+			<referenceformattedtextfield name="text">
+				<anchored>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<bottom>
+						<anchor>bottom</anchor>
+						<offset>-5</offset>
+					</bottom>
+				</anchored>
+				<footer>footer_wide</footer>
+			</referenceformattedtextfield>
+			<scrollercontrol>
+				<anchored>
+					<to>text</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>text</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="referencemanualsection">
+		<sizelimits>
+			<minimum>
+				<height>25</height>
+			</minimum>
+			<maximum>
+				<height>10000</height>
+			</maximum>
+		</sizelimits>
+		<sheetdata>
+			<genericcontrol name="sectionframe">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>1</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-1</offset>
+					</right>
+					<bottom>
+						<anchor>bottom</anchor>
+					</bottom>
+				</anchored>
+				<frame>
+					<name>reference-section</name>
+				</frame>
+			</genericcontrol>
+
+			<stringfield name="suppress">
+				<bounds>0,4,-1,15</bounds>
+				<static>0</static>
+				<invisible />
+			</stringfield>
+			<stringfield name="name">
+				<bounds>2,4,-1,15</bounds>
+				<font>reference-section</font>
+				<static />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+
+					function onClickRelease(button, x, y)
+						window.article.setVisible(not window.article.isVisible());
+						local article_node = window.getDatabaseNode().getChild("article");
+						if article_node then
+							if article_node.getChildCount() == 1 and window.article.isVisible() then
+								for x, w1 in pairs(article_node.getChildren()) do
+									local myclass, myrecord = w1.getChild("listlink").getValue();
+									local myarticlelist = window.windowlist.window.windowlist.window.articletext;
+									myarticlelist.closeAll();
+									myarticlelist.createWindowWithClass(myclass, myrecord); 								
+								end
+							end
+						end
+						return true;
+					end
+				</script>
+			</stringfield>
+			<windowlist name="article">
+				<noscroll />
+				<bounds>20,30,-20,-1</bounds>
+				<datasource>.article</datasource>
+				<class>referencemanualarticle</class>
+				<invisible />
+				<script>
+					function onFilter(w)
+						local top = w.windowlist.window;
+						while top.windowlist do
+							top = top.windowlist.window;
+						end
+						local f = string.lower(top.filter.getValue());
+						
+						if f == "" then
+							return true;
+						end
+						
+
+						if string.find(string.lower(w.keywords.getValue()), f, 0, true) then
+							top = w
+							while top.windowlist do
+								top.windowlist.setVisible(true);
+								top = top.windowlist.window;								
+							end
+							return true;
+						end
+						
+						return false;
+					end
+				</script>
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="referencemanualchapter">
+		<sizelimits>
+			<minimum>
+				<height>35</height>
+			</minimum>
+			<maximum>
+				<height>10000</height>
+			</maximum>
+		</sizelimits>
+		<sheetdata>
+			<genericcontrol name="chapterframe">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>1</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-1</offset>
+					</right>
+					<bottom>
+						<anchor>bottom</anchor>
+					</bottom>
+				</anchored>
+				<frame>
+					<name>reference-chapter</name>
+				</frame>
+			</genericcontrol>
+
+			<stringfield name="suppress">
+				<bounds>0,4,-1,15</bounds>
+				<static>0</static>
+				<invisible />
+			</stringfield>
+			<stringfield name="name">
+				<bounds>2,7,-1,15</bounds>
+				<font>reference-chapter</font>
+				<static />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+
+					function onClickRelease(button, x, y)
+						window.section.setVisible(not window.section.isVisible());
+						return true;
+					end
+				</script>
+			</stringfield>
+			<windowlist name="section">
+				<noscroll />
+				<bounds>20,32,-20,-1</bounds>
+				<datasource>.section</datasource>
+				<class>referencemanualsection</class>
+				<invisible />
+				<script>
+					function onFilter(w)
+						
+						if w.suppress.getValue() == "0" then
+							return true;
+						else
+							return false;
+						end						
+						return true;
+					end
+				</script>
+
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="reference_manual">
+		<frame>sctbox</frame>
+		<sizelimits>
+			<minimum>
+				<width>950</width>
+				<height>450</height>
+			</minimum>
+			<maximum>
+				<height>450</height>
+			</maximum>
+			<dynamic>
+				<resize>horizontal</resize>
+			</dynamic>
+		</sizelimits>
+		<placement>
+			<width>950</width>
+			<height>450</height>
+		</placement>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>description</field>
+		</tooltip>
+		<sheetdata>
+			<!-- index Frame -->		
+			<genericcontrol name="indexframe">
+				<bounds>20,24,330,-55</bounds>
+				<frame>
+					<name>whitecontrolarea</name>
+					<offset>0,1,0,0</offset>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="chapter">
+				<anchored>
+					<to>indexframe</to>
+					<position>over</position>
+					<offset>-5,-5</offset>
+				</anchored>
+				<datasource>.chapter</datasource>
+				<class>referencemanualchapter</class>
+				<script>
+					function onFilter(w)
+						if w.suppress.getValue() == "0" then
+							return true;
+						else
+							return false;
+						end						
+						return true;
+					end
+				</script>
+			</windowlist>
+
+			<genericcontrol name="controlframe">
+				<bounds>20,-53,330,-24</bounds>
+				<frame>
+					<name>whitecontrolarea</name>
+					<offset>0,1,0,0</offset>
+				</frame>
+			</genericcontrol>
+			<scrollercontrol>
+				<anchored>
+					<to>controlframe</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>chapter</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<!-- text Frame -->		
+			<genericcontrol name="textframe">
+				<bounds>351,24,-15,-24</bounds>
+				<frame>
+					<name>whitecontrolarea</name>
+					<offset>0,1,0,0</offset>
+				</frame>
+			</genericcontrol>
+
+			<windowlist name="articletext">
+				<anchored>
+					<to>textframe</to>
+					<position>over</position>
+					<offset>-5,-5</offset>
+				</anchored>
+				<datasource />
+				<class>reference_manualtextwide</class>
+				<script>
+					function onInit()
+						closeAll();
+					end
+				</script>
+				<noscroll />
+			</windowlist>
+			<filter name="filter">
+				<bounds>395,-55,-25,-35</bounds>
+				<target>chapter.section.article</target>
+				<trigger>filtertrigger</trigger>
+				<script>
+					function onValueChanged()
+				  		if super and super.onValueChanged then
+   							super.onValueChanged();
+  						end
+  						local f = window.filter.getValue();
+						
+  						for k, chapterwin in pairs(window.chapter.getWindows()) do
+							local showchapter = false;
+
+							for k2, sectionwin in pairs(chapterwin.section.getWindows()) do
+								local showsection = false;
+
+								for k3, articlewin in pairs(sectionwin.article.getWindows()) do
+									if string.find(string.lower(articlewin.keywords.getValue()), f, 0, true) then
+										showsection = true;
+									end									
+								end
+
+								if showsection then
+									showchapter = true;
+									sectionwin.suppress.setValue("0");
+								else
+									sectionwin.suppress.setValue("1");
+								end
+							end
+
+							chapterwin.section.applyFilter()
+							
+							if showchapter then
+								chapterwin.suppress.setValue("0");
+							else
+								chapterwin.suppress.setValue("1");
+							end
+  						end
+  							
+						window.chapter.applyFilter()            
+					end				
+				</script>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<bounds>360,-70,21,41</bounds>
+				<target>filter</target>
+			</filtertrigger>			
+
+			<genericcontrol name="expand">
+				<icon>expand_icon</icon>				
+				<anchored>
+					<to>controlframe</to>
+					<position>insideleft</position>
+					<offset>5,0,0,0</offset>
+					<size>
+						<width>20</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Expand All</text>
+				</tooltip>
+				<script>
+					function onClickDown(button, x, y)
+  						return true;
+					end
+
+					function onClickRelease(button, x, y)
+  						for k, chapterwin in pairs(window.chapter.getWindows()) do
+    						for k2, sectionwin in pairs(chapterwin.section.getWindows()) do								
+								sectionwin.article.setVisible(true);
+							end
+							chapterwin.section.setVisible(true);
+  						end
+  						
+  						return true;
+					end
+				</script>
+			</genericcontrol>
+			<genericcontrol name="collapse">
+				<icon>collapse_icon</icon>
+				<anchored>
+					<to>controlframe</to>
+					<position>insideleft</position>
+					<offset>30,0,0,0</offset>
+					<size>
+						<width>20</width>
+					</size>
+				</anchored>
+				<tooltip>
+					<text>Collapse All</text>
+				</tooltip>
+				<script>
+					function onClickDown(button, x, y)
+  						return true;
+					end
+
+					function onClickRelease(button, x, y)
+  						for k, chapterwin in pairs(window.chapter.getWindows()) do
+							for k2, sectionwin in pairs(chapterwin.section.getWindows()) do		
+								sectionwin.article.setVisible(false);
+							end
+							chapterwin.section.setVisible(false);
+  						end
+
+  						return true;
+					end
+				</script>
+			</genericcontrol>
+
+			<closebutton_skillchallengetracker />
+		</sheetdata>
+	</windowclass>
+</root>

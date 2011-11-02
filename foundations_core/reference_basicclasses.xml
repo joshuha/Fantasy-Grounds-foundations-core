@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<template name="referencestatblockfield">
+		<formattedtextfield>
+			<font>
+				<normal>statblock-r-med</normal>
+				<bold>statblock-b-med</bold>
+				<italic>statblock-i-med</italic>
+				<bolditalic>statblock-bi-med</bolditalic>
+				<title>statblock-r-large</title>
+			</font>
+			<linkicon>
+				<link>button_openwindow</link>
+				<emptylink>button_emptytarget</emptylink>
+			</linkicon>
+			<selectioncolor>#FFD296</selectioncolor>
+		</formattedtextfield>
+	</template>
+
+	<template name="referenceformattedtextfield">
+		<formattedtextfield>
+			<font>
+				<normal>reference-r</normal>
+				<bold>reference-b</bold>
+				<italic>reference-i</italic>
+				<bolditalic>reference-bi</bolditalic>
+				<title>reference-h</title>
+			</font>
+			<linkicon>
+				<link>button_openwindow</link>
+				<emptylink>button_emptytarget</emptylink>
+			</linkicon>
+			<selectioncolor>#FFD296</selectioncolor>
+		</formattedtextfield>
+	</template>
+	
+	<windowclass name="referencetext">
+		<frame>referencepage</frame>
+		<placement>
+			<size>
+				<width>400</width>
+				<height>650</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<sheetdata>
+			<jpgreferencecontrol name="open">
+				<bounds>20,18,20,20</bounds>
+				<class>referencetext</class>
+			</jpgreferencecontrol>
+
+			<stringfield name="name">
+				<bounds>45,22,-25,20</bounds>
+				<font>reference-h</font>
+				<nodrag />
+				<static />
+			</stringfield>
+			<referenceformattedtextfield name="text">
+				<bounds>25,44,-25,-50</bounds>
+				<footer>footer_wide</footer>
+			</referenceformattedtextfield>
+			<scrollercontrol>
+				<anchored>
+					<to>text</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>text</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<closebutton_referencepage />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="referencetextwide">
+		<frame>referencepage</frame>
+		<placement>
+			<size>
+				<width>650</width>
+				<height>650</height>
+			</size>
+		</placement>
+		<sharable />
+		<sizelimits>
+			<dynamic>
+				<resize>vertical</resize>
+			</dynamic>
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<sheetdata>
+			<jpgreferencecontrol name="open">
+				<bounds>20,18,20,20</bounds>
+				<class>referencetextwide</class>
+			</jpgreferencecontrol>
+
+			<stringfield name="name">
+				<bounds>45,22,-25,20</bounds>
+				<font>reference-h</font>
+				<nodrag />
+				<static />
+			</stringfield>
+
+			<referenceformattedtextfield name="text">
+				<bounds>25,44,-25,-50</bounds>
+				<footer>footer_wide</footer>
+			</referenceformattedtextfield>
+			<scrollercontrol>
+				<anchored>
+					<to>text</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>text</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<closebutton_referencepage />
+		</sheetdata>
+	</windowclass>
+
+	<!-- Generic lists -->
+	<windowclass name="referenceindexitem">
+		<sizelimits>
+			<minimum>
+				<height>20</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<windowreferencefield name="listlink">
+				<bounds>0,0,20,20</bounds>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<description>
+					<field>name</field>
+				</description>
+			</windowreferencefield>
+			<staticlinkstringfield name="name">
+				<bounds>25,4,-1,15</bounds>
+				<font>list-subtitle</font>
+				<underlineoffset>-3</underlineoffset>
+				<linktarget>listlink</linktarget>
+			</staticlinkstringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="referenceindex">
+		<frame>referencepage</frame>
+		<placement>
+			<size>
+				<width>350</width>
+				<height>450</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<sheetdata>
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<field>name</field>
+				</title>
+			</windowtitlebar>
+
+			<!-- CONTENT -->
+			<windowlist name="index">
+				<bounds>20,50,-20,-65</bounds>
+				<datasource>.index</datasource>
+				<class>referenceindexitem</class>
+				<frame>
+					<name>sheetgroup</name>
+					<offset>9,10,9,6</offset>
+				</frame>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>index</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>index</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<closebutton_referencepage />
+		</sheetdata>
+	</windowclass>
+
+	<!-- Inline text list -->
+	<windowclass name="referenceinlineindexitem">
+		<sizelimits>
+			<minimum>
+				<height>20</height>
+			</minimum>
+			<maximum>
+				<height>10000</height>
+			</maximum>
+		</sizelimits>
+		<sheetdata>
+			<stringfield name="name">
+				<bounds>0,4,-1,15</bounds>
+				<font>list-subtitle</font>
+				<static />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+
+					function onClickRelease(button, x, y)
+						window.text.setVisible(not window.text.isVisible());
+						return true;
+					end
+				</script>
+			</stringfield>
+			<referenceformattedtextfield name="text">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<offset>3</offset>
+					</top>
+				</anchored>
+				<invisible />
+			</referenceformattedtextfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="referenceinlineindex">
+		<frame>referencepage</frame>
+		<placement>
+			<size>
+				<width>300</width>
+				<height>450</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_reference</minimize>
+		<tooltip>
+			<field>description</field>
+		</tooltip>
+		<sheetdata>
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<field>name</field>
+				</title>
+			</windowtitlebar>
+
+			<!-- LIST -->
+			<windowlist name="index">
+				<bounds>20,50,-20,-65</bounds>
+				<datasource>.index</datasource>
+				<class>referenceinlineindexitem</class>
+				<frame>
+					<name>sheetgroup</name>
+					<offset>9,10,9,6</offset>
+				</frame>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>index</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>index</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<closebutton_referencepage />
+		</sheetdata>
+	</windowclass>
+</root>

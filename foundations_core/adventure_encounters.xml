@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="battle_npcmaplinkitem">
+		<sizelimits>
+			<minimum>
+				<height>27</height>
+				<width>27</width>
+			</minimum>
+		</sizelimits>
+		<script file="scripts/campaign_encounter_maplink.lua" />
+		<sheetdata>
+			<tokencontrol name="token">
+				<bounds>2,2,23,23</bounds>
+				<script>
+					function onDragEnd(draginfo)
+						local prototype, dropref = draginfo.getTokenData();
+						window.setLink(dropref);
+						return true;
+					end
+				</script>
+			</tokencontrol>
+			<buttoncontrol name="linked">
+				<bounds>2,2,23,23</bounds>
+				<invisible />
+				<icon>
+					<normal>icon_maplinked</normal>
+					<pressed>icon_maplinked</pressed>
+				</icon>
+				<script>
+					function onButtonPress()
+						if User.isHost() then
+							window.clearLink();
+						end
+					end
+				</script>
+			</buttoncontrol>
+			
+			<numberfield name="imagex">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</numberfield>
+			<numberfield name="imagey">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</numberfield>
+			<numbercontrol name="imageid">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</numbercontrol>
+			<stringfield name="imagelink">
+				<bounds>0,0,0,0</bounds>
+				<invisible />
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="battle_npclistitem">
+		<sizelimits>
+			<minimum>
+				<height>12</height>
+			</minimum>
+		</sizelimits>
+		<script file="scripts/campaign_encounter_npc.lua" />
+		<sheetdata>
+			<basicnumberfield name="count">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>6</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>5</offset>
+					</left>
+					<size>
+						<width>32</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<default>1</default>
+				<min>1</min>
+				<script>
+					function onValueChanged()
+						window.synchToCount();
+					end
+				</script>
+			</basicnumberfield>
+			
+			<tokenfield name="token">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<left>
+						<parent>count</parent>
+						<anchor>right</anchor>
+						<offset>10</offset>
+					</left>
+					<size>
+						<width>23</width>
+						<height>23</height>
+					</size>
+				</anchored>
+				<empty>indicator_emptytoken</empty>
+				<script>
+					function onValueChanged()
+						window.synchTokenView();
+					end
+				</script>
+			</tokenfield>
+			
+			<windowreferencefield name="link">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-6</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>5</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_dragtarget</normal>
+				</icon>
+			</windowreferencefield>
+
+			<stringfield name="name">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>10</offset>
+					</top>
+					<left>
+						<parent>token</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<size>
+						<height>16</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<frame>
+					<name>textlinesmall</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+			</stringfield>
+			
+			<stringcontrol>
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>36</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+				</anchored>
+				<font>sheetlabelmini</font>
+				<static>Placement:</static>
+			</stringcontrol>
+			<windowlist name="maplinklist">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+	 					<offset>28</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>75</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+				</anchored>			
+				<datasource>.maplink</datasource>
+				<class>battle_npcmaplinkitem</class>
+				<skipempty />
+				<noscroll />
+				<columns>
+					<width>27</width>
+					<fillwidth />
+				</columns>
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="battle">
+		<frame>charsheet</frame>
+		<placement>
+			<size>
+				<width>350</width>
+				<height>400</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+			<minimum>
+				<width>350</width>
+				<height>300</height>
+			</minimum>
+		</sizelimits>
+		<nodelete />
+		<minimize>minimized_combat</minimize>
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<sheetdata>
+			<!-- NAME -->
+			<genericcontrol name="nameframe">
+				<bounds>10,20,-15,35</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowopencontrol>
+				<anchored>
+					<to>nameframe</to>
+					<position>insidetopleft</position>
+					<offset>13,8</offset>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<class>battle</class>
+				<description>
+					<field>name</field>
+				</description>
+			</windowopencontrol>
+			<stringfield name="name">
+				<anchored>
+					<top>
+						<parent>nameframe</parent>
+						<anchor>top</anchor>
+						<offset>9</offset>
+					</top>
+					<left>
+						<parent>nameframe</parent>
+						<anchor>left</anchor>
+						<offset>35</offset>
+					</left>
+					<right>
+						<parent>nameframe</parent>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+				</anchored>
+				<empty>&#171; New Encounter &#187;</empty>
+				<font>sheettext</font>
+				<tabtarget next="level" prev="exp" />
+			</stringfield>
+
+			<!-- ENCOUNTER DETAILS -->
+			<genericcontrol name="detailframe">
+				<bounds>10,55,-10,45</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			
+			
+			<!-- ENCOUNTER NPCS -->
+			<genericcontrol name="npcframe">
+				<bounds>10,100,-10,-40</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<stringcontrol>
+				<anchored>
+					<to>npcframe</to>
+					<position>insidetopleft</position>
+					<offset>30,10</offset>
+				</anchored>
+				<center />
+				<font>sheetlabelsmall</font>
+				<static>#</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>npcframe</to>
+					<position>insidetopleft</position>
+					<offset>55,10</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Token</static>
+			</stringcontrol>
+			<stringcontrol>
+				<anchored>
+					<to>npcframe</to>
+					<position>insidetopleft</position>
+					<offset>110,10</offset>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Name</static>
+			</stringcontrol>
+			
+			<stringcontrol>
+				<anchored>
+					<to>npcframe</to>
+					<position>insidebottomleft</position>
+					<offset>80,10</offset>
+					<size>
+						<width>200</width>
+					</size>
+				</anchored>
+				<font>chatitalicfont</font>
+				<static>Drop NPC links on this frame to add</static>
+			</stringcontrol>
+
+			<windowlist name="npclist">
+				<anchored>
+					<to>npcframe</to>
+					<position>over</position>
+					<offset>-12,-25</offset>
+					<top>
+						<parent>npcframe</parent>
+						<offset>20</offset>
+					</top>
+				</anchored>
+				<datasource>.npclist</datasource>
+				<class>battle_npclistitem</class>
+				<allowdelete />
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.name.getValue() &gt; w2.name.getValue();
+					end
+					
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("shortcut") then
+							local class, datasource = draginfo.getShortcutData();
+							local source = draginfo.getDatabaseNode();
+
+							if source then
+								if class == "npc" then
+									local wnd = NodeManager.createWindow(self);
+									if wnd then
+										wnd.name.setValue(NodeManager.get(source, "name", ""));
+										wnd.link.setValue("npc", source.getNodeName());
+										
+										local tokenval = NodeManager.get(source, "token", nil);
+										if tokenval then
+											wnd.token.setPrototype(tokenval);
+										end
+
+										wnd.count.setFocus();
+									end
+								end
+							end
+
+							return true;
+						end
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>npclist</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>npclist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<buttoncontrol name="npcadd">
+				<bounds>22,-40,33,26</bounds>
+				<icon>
+					<normal>button_ctnextactor</normal>
+					<pressed>button_ctnextactor_down</pressed>
+				</icon>
+				<tooltip>
+					<text>Add NPCs to combat tracker</text>
+				</tooltip>
+				<script>
+					function onButtonPress()
+						if User.isHost() then
+							for kNPC, vNPC in pairs(window.npclist.getWindows()) do
+								for kMapLink, vMapLink in pairs(vNPC.maplinklist.getWindows()) do
+									vMapLink.deleteLink();
+								end
+							end
+							
+							local wnd = Interface.openWindow("combattracker_window", "combattracker");
+							if wnd then
+								wnd.list.addBattle(window.getDatabaseNode());
+							end
+						end
+					end
+				</script>
+			</buttoncontrol>
+			
+			<closebutton_charsheetmini />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="battlesmall">
+		<sizelimits>
+			<minimum>
+				<height>10</height>
+			</minimum>
+		</sizelimits>
+		<nodelete />
+		<script file="scripts/campaign_list_record.lua" />
+		<sheetdata>
+			<jpgreferencecontrol name="open">
+				<bounds>0,0,20,20</bounds>
+				<class>battle</class>
+			</jpgreferencecontrol>
+
+			<genericcontrol name="access">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-2</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>14</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						window.unshare();
+						return true;
+					end
+				</script>
+			</genericcontrol>
+			<genericcontrol name="modified">
+				<anchored>
+					<right>
+						<parent>access</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>18</height>
+					</size>
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			
+			<linkstringfield name="name">
+				<anchored>
+					<left>
+						<parent>open</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<right>
+						<parent>modified</parent>
+						<anchor>left</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<empty>&#171; New Encounter &#187;</empty>
+				<selectioncolor>#90ffffff</selectioncolor>
+				<font>sheettext</font>
+				<linktarget>open</linktarget>
+			</linkstringfield>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="battlelist">
+		<frame>scrollboxfortabs</frame>
+		<placement>
+			<size>
+				<width>275</width>
+				<height>350</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+			<minimum>
+				<width>200</width>
+				<height>290</height>
+			</minimum>
+		</sizelimits>
+		<softclose />
+		<nodelete />
+		<sheetdata>
+			<genericcontrol>
+				<bounds>16,21,30,177</bounds>
+				<icon>title_encounters</icon>
+			</genericcontrol>
+
+			<windowlist name="list">
+				<bounds>50,25,-30,-34</bounds>
+				<datasource>.</datasource>
+				<class>battlesmall</class>
+				<sortfields>name</sortfields>
+				<footer>footer_narrow</footer>
+				<allowcreate />
+				<allowdelete />
+				<useallmodules />
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.name.getValue() &gt; w2.name.getValue();
+					end
+					
+					function onFilter(w)
+						local f = string.lower(window.filter.getValue());
+						
+						if f == "" then
+							return true;
+						end
+						
+						if string.find(string.lower(w.name.getValue()), f, 0, true) then
+							return true;
+						end
+						
+						return false;
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<bounds>-105,-61,45,27</bounds>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<jpgnewcontrol>
+				<bounds>-55,-58,34,25</bounds>
+				<class>battle</class>
+				<gmonly />
+			</jpgnewcontrol>
+
+			<jpgcategorycontrol>
+				<bounds>24,-39,-24,-1</bounds>
+				<targetcontrol>list</targetcontrol>
+			</jpgcategorycontrol>
+
+			<filter name="filter">
+				<bounds>55,-70,-50,20</bounds>
+				<target>list</target>
+				<trigger>filtertrigger</trigger>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<bounds>20,-85,21,41</bounds>
+				<target>filter</target>
+			</filtertrigger>
+			
+			<closebutton_scrollbox />
+		</sheetdata>
+	</windowclass>
+</root>

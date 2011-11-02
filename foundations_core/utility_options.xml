@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="option_entry_base">
+		<sizelimits>
+			<minimum>
+				<height>16</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<stringcontrol name="label">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>10</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Unknown Option</static>
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="option_entry_radio">
+		<sizelimits>
+			<minimum>
+				<height>16</height>
+			</minimum>
+		</sizelimits>
+		<script>
+			local sOptionKey = nil;
+			local enable_update = true;
+			
+			function setLabel(sLabel)
+				label.setValue(sLabel);
+			end
+			
+			function setLocked(bValue)
+				radio.setLocked(bValue);
+			end
+			
+			function initialize(sKey, aCustom)
+				sOptionKey = sKey;
+				
+				if sOptionKey then
+					if aCustom then
+						radio.initialize(aCustom.labels, aCustom.values, aCustom.optionwidth, aCustom.default);
+					end
+
+					enable_update = false;
+					radio.setStringValue(OptionsManager.getOption(sOptionKey));
+					enable_update = true;
+				end
+			end
+			
+			function onValueChanged()
+				if enable_update and sOptionKey then
+					OptionsManager.setOption(sOptionKey, radio.getStringValue());
+				end
+			end
+		</script>
+		<sheetdata>
+			<radiogroup name="radio">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>10</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>200</offset>
+					</left>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetlabel</font>
+				<sourceless />
+				<script>
+					function onValueChanged()
+						window.onValueChanged();
+					end
+				</script>
+			</radiogroup>
+			<stringcontrol name="label">
+				<anchored>
+					<top>
+						<parent>radio</parent>
+						<anchor>top</anchor>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>15</offset>
+					</left>
+					<right>
+						<parent>radio</parent>
+						<anchor>left</anchor>
+						<offset>5</offset>
+					</right>
+				</anchored>
+				<font>sheetlabel</font>
+				<multilinespacing>15</multilinespacing>
+				<static />
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="options_group">
+		<sizelimits>
+			<minimum>
+				<height>0</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<stringcontrol name="label">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+				</anchored>
+				<center />
+				<frame>
+					<name>rowshade</name>
+				</frame>
+				<font>statblock-b-large</font>
+				<empty>&#171; Option Set &#187;</empty>
+				<static />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+
+					function onClickRelease(button, x, y)
+						window.options_list.setVisible(not window.options_list.isVisible());
+						if window.options_list.isVisible() then
+							window.status_icon.setIcon("collapse_icon");
+						else
+							window.status_icon.setIcon("expand_icon");
+						end
+						return true;
+					end
+				</script>
+			</stringcontrol>
+			<genericcontrol name="status_icon">
+				<anchored>
+					<to>label</to>
+					<position>left</position>
+					<offset>-20</offset>
+					<size>
+						<width>20</width>
+					</size>
+				</anchored>
+				<icon>collapse_icon</icon>
+				<script>
+					function onClickDown(button, x, y)
+						return window.label.onClickDown(button, x, y);
+					end
+
+					function onClickRelease(button, x, y)
+						return window.label.onClickRelease(button, x, y);
+					end
+				</script>
+			</genericcontrol>
+
+			<windowlist name="options_list">
+				<class>option_entry_base</class>
+				<skipempty />
+				<noscroll />
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>14</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+				</anchored>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.label.getValue() &gt; w2.label.getValue();
+					end
+				</script>
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="options">
+		<frame>sctbox</frame>
+		<playercontrol />
+		<nodelete />
+		<placement>
+			<size>
+				<width>480</width>
+				<height>480</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>480</width>
+				<height>480</height>
+			</minimum>
+			<maximum>
+				<width>480</width>
+				<height>480</height>
+			</maximum>
+		</sizelimits>
+		<script>
+			function onInit()
+				OptionsManager.populate(self);
+			end
+		</script>
+		<sheetdata>
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<text>Options</text>
+				</title>
+			</windowtitlebar>
+
+			<!-- GROUP LIST -->
+			<windowlist name="grouplist">
+				<bounds>30,50,-30,-40</bounds>
+				<class>options_group</class>
+				<skipempty />
+				<frame>
+					<name>sheetgroup</name>
+					<offset>9,10,9,6</offset>
+				</frame>
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.label.getValue() &gt; w2.label.getValue();
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>grouplist</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>grouplist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<closebutton_skillchallengetracker />
+		</sheetdata>
+	</windowclass>
+</root>

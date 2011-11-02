@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<includefile source="adventure_story.xml" />
+	<includefile source="adventure_images.xml" />
+	<includefile source="adventure_encounters.xml" />
+	<includefile source="adventure_npcs.xml" />
+	<includefile source="adventure_notes.xml" />
+</root>

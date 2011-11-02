@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<includefile source="utility_modules.xml" />
+	<includefile source="utility_tokenbag.xml" />
+
+	<includefile source="utility_combattracker.xml" />
+	<includefile source="utility_clienttracker.xml" />
+	<includefile source="utility_modifiers.xml" />
+	<includefile source="utility_effects.xml" />
+	<includefile source="utility_options.xml" />
+
+	<includefile source="utility_characterlist.xml" />
+	<includefile source="utility_identity.xml" />
+	<includefile source="utility_export.xml" />
+	<includefile source="utility_dicetower.xml" />
+	<includefile source="utility_misc.xml" />
+</root>

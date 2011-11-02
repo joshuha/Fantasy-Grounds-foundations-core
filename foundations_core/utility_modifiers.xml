@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="modifiersmall">
+		<playercontrol />
+		<sizelimits>
+			<minimum>
+				<height>26</height>
+			</minimum>
+		</sizelimits>
+		<script>
+			function onInit()
+				if User.isHost() then
+					registerMenuItem("Delete Item", "delete", 6);
+					registerMenuItem("Confirm Delete", "delete", 6, 7);
+				else
+					isgmonly.setVisible(false);
+				end
+			end
+
+			function onMenuSelection(selection, subselection)
+				if selection == 6 and subselection == 7 then
+					getDatabaseNode().delete();
+				end
+			end
+			
+			function onDrag(button, x, y, draginfo)
+				if label.getValue() ~= "" then
+					draginfo.setType("number");
+					draginfo.setDescription(label.getValue());
+					draginfo.setStringData(label.getValue());
+					draginfo.setNumberData(bonus.getValue());
+				end
+
+				return true;
+			end
+			
+			function onDoubleClick(x, y)
+				ModifierStack.addSlot(label.getValue(), bonus.getValue());
+			end
+
+			function onDrop(x, y, draginfo)
+				return windowlist.onDrop(x, y, draginfo);
+			end
+
+			function onGainFocus()
+				window.setFrame("rowshade");
+			end
+
+			function onLoseFocus()
+				window.setFrame(nil);
+			end
+		</script>
+		<sheetdata>
+			<jpgnumberfield name="bonus">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>30</width>
+						<height>22</height>
+					</size>
+				</anchored>
+				<font>sheetnumbersmall</font>
+				<frame>
+					<name>bonus</name>
+					<offset>2,2,2,1</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>2,2,2,2</offset>
+				</keyeditframe>
+				<stateframe>
+					<drophilight>
+						<name>sheetfocus</name>
+						<offset>2,2,2,2</offset>
+					</drophilight>
+				</stateframe>
+				<displaysign />
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<gmonly />
+				<script>
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return dragging;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+					
+					function onDoubleClick(x, y)
+						return window.onDoubleClick(x, y);
+					end
+
+					function onDrop(x, y, draginfo)
+						if draginfo.getType() ~= "number" then
+							return false;
+						end
+					end
+				</script>
+			</jpgnumberfield>
+
+			<checkbox name="isgmonly">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>7</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<gmonly />
+				<parameters>
+					<icons>button_toggle_gm</icons>
+					<defaulticon>button_toggle_visible</defaulticon>
+					<tooltips>Visible to GM</tooltips>
+					<defaulttooltip>Visible to All</defaulttooltip>
+				</parameters>
+			</checkbox>
+
+			<textlistitemvalue name="label">
+				<anchored>
+					<left>
+						<parent>isgmonly</parent>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</left>
+					<right>
+						<parent>bonus</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<gmonly />
+				<script>
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+					
+					function onDoubleClick(x, y)
+						return window.onDoubleClick(x, y);
+					end
+				</script>
+			</textlistitemvalue>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="modifierlist">
+		<frame>sctbox</frame>
+		<playercontrol />
+		<nodelete />
+		<tooltip>
+			<text>Modifier list</text>
+		</tooltip>
+		<placement>
+			<size>
+				<width>275</width>
+				<height>350</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+			<minimum>
+				<width>200</width>
+				<height>220</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<text>Modifiers</text>
+				</title>
+			</windowtitlebar>
+			
+			<!-- LIST -->
+			<windowlist name="list">
+				<bounds>30,50,-30,-75</bounds>
+				<datasource>.</datasource>
+				<class>modifiersmall</class>
+				<useallmodules />
+				<frame>
+					<name>sheetgroup</name>
+					<offset>9,10,9,6</offset>
+				</frame>
+				<script>
+					function onInit()
+						if User.isHost() then
+							registerMenuItem("Create Item", "insert", 5);
+						end
+					end
+					
+					function createItem()
+						local wnd = NodeManager.createWindow(self);
+						if wnd then
+							wnd.label.setFocus();
+						end
+						return wnd;
+					end
+
+					function onMenuSelection(selection)
+						if selection == 5 then
+							createItem();
+						end
+					end
+					
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						if User.isHost() then
+							if not getNextWindow(nil) then
+								createItem();
+							end
+						end
+						return true;
+					end
+					
+					function onSortCompare(w1, w2)
+						return w1.label.getValue() &gt; w2.label.getValue();
+					end
+					
+					function onDrop(x, y, draginfo)
+						if User.isHost() then
+							if draginfo.getType() == "number" then
+								local wnd = NodeManager.createWindow(self);
+								if wnd then
+									wnd.label.setValue(draginfo.getDescription());
+									wnd.bonus.setValue(draginfo.getNumberData());
+								end
+								return true;
+							end
+						end
+					end
+
+					function onFilter(w)
+						if not User.isHost() and w.isgmonly.getState() then
+							return false;
+						end
+
+						local f = string.lower(window.filter.getValue());
+						if f == "" then
+							return true;
+						end
+						
+						if string.find(string.lower(w.label.getValue()), f, 0, true) then
+							return true;
+						end
+						
+						return false;
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol name="scroller">
+				<anchored>
+					<to>list</to>
+					<position>belowright</position>
+					<offset>-2,14</offset>
+				</anchored>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<!-- LIST CONTROLS -->
+			<filter name="filter">
+				<bounds>65,-55,-80,20</bounds>
+				<target>list</target>
+				<trigger>filtertrigger</trigger>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<bounds>30,-65,21,41</bounds>
+				<target>filter</target>
+			</filtertrigger>			
+			
+			<closebutton_skillchallengetracker />
+		</sheetdata>
+	</windowclass>
+</root>

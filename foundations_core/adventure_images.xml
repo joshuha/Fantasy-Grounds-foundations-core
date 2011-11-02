@@ -1,0 +1,931 @@
+<!-- GURPS 4e ruleset for SmiteWorks' Fantasy Grounds II.
+  --
+  -- GURPS is a trademark of Steve Jackson Games, and its rules and art 
+  -- are copyrighted by Steve Jackson Games. All rights are reserved by 
+  -- Steve Jackson Games. This game aid is the original creation of 
+  -- Graham Brand and is released for free distribution, and not for 
+  -- resale, under the permissions granted in the Steve Jackson Games 
+  -- Online Policy at http://www.sjgames.com/general/online_policy.html.
+  --
+  -- Artwork derived from the 'd20' ruleset is copyright of SmiteWorks Ltd., 
+  -- and is used with permission.
+  --
+  -- This ruleset has been developed from the xml files and scripts 
+  -- distributed with Fantasy Grounds II, which is copyright 2007 SmiteWorks Ltd.
+-->
+
+<?xml version="1.0" encoding="iso-8859-1"?>
+<root version="2.0">
+  <imageupdatefolder>
+		<folder>images</folder>
+		<rootnode>image</rootnode>
+		<field>image</field>
+		<namefield>name</namefield>
+	</imageupdatefolder>
+
+  <windowclass name="mapinfo">
+    <sheetdata>
+      <genericcontrol name="infoframe">
+        <bounds>0,40,250,200</bounds>
+        <frame>
+          <name>collector</name>
+        </frame>
+      </genericcontrol>
+
+      <stringcontrol name="glabel">
+        <anchored>
+          <to>infoframe</to>
+          <position>lefthigh</position>
+          <offset>-35,25</offset>
+        </anchored>
+        <font>sheetlabelsmall</font>
+        <static>Grid</static>
+      </stringcontrol>
+
+      <stringcontrol name="gslabel">
+        <anchored>
+          <to>infoframe</to>
+          <position>lefthigh</position>
+          <offset>-90,10</offset>
+        </anchored>
+        <font>sheetlabelsmall</font>
+        <static>Scale</static>
+      </stringcontrol>
+
+      <numberfield name="gridscale">
+        <anchored>
+          <to>infoframe</to>
+          <position>lefthigh</position>
+          <offset>-120,22</offset>
+          <size>
+            <width>80</width>
+          </size>
+        </anchored>
+        <nodrag />
+        <nodrop />
+        <font>sheetnumbersmall</font>
+        <frame>
+          <name>modifier</name>
+          <offset>5,5,5,5</offset>
+        </frame>
+        <keyeditframe>
+          <name>sheetfocus</name>
+          <offset>5,5,5,5</offset>
+        </keyeditframe>
+      </numberfield>
+
+      <stringcontrol name="gulabel">
+        <anchored>
+          <to>infoframe</to>
+          <position>lefthigh</position>
+          <offset>-185,10</offset>
+        </anchored>
+        <font>sheetlabelsmall</font>
+        <static>Unit</static>
+      </stringcontrol>
+
+      <labelcycler name="gridunit">
+        <anchored>
+          <to>infoframe</to>
+          <position>lefthigh</position>
+          <offset>-230,22</offset>
+          <size>
+            <width>100</width>
+          </size>
+        </anchored>
+        <nodrag />
+        <nodrop />
+        <center />
+        <font>sheetnumbersmall</font>
+        <frame>
+          <name>modifier</name>
+          <offset>5,5,5,5</offset>
+        </frame>
+        <stateframe>
+          <hover>
+            <name>sheetfocus</name>
+            <offset>5,5,5,5</offset>
+          </hover>
+        </stateframe>
+        <parameters>
+          <labels>Feet|Yards|Miles|Meters|Kilometers|AU|Light Years|Parsecs</labels>
+          <values>ft|yd|mi|m|km|AU|ly|pc</values>
+        </parameters>
+      </labelcycler>
+      
+      <formattedtextfield name="description">
+        <anchored>
+          <to>infoframe</to>
+          <position>lefthigh</position>
+          <offset>-230,60</offset>
+          <size>
+            <width>210</width>
+            <height>120</height>
+          </size>
+        </anchored>
+        <font>
+          <normal>chatfont</normal>
+          <bold>narratorfont</bold>
+          <italic>chatitalicfont</italic>
+          <bolditalic>chatbolditalicfont</bolditalic>
+          <title>defaultstringcontrol</title>
+        </font>
+        <linkicon>
+          <link>button_openwindow</link>
+          <emptylink>button_emptytarget</emptylink>
+        </linkicon>
+        <frame>
+          <name>modifier</name>
+          <offset>10,10,10,10</offset>
+        </frame>
+        <empty>Click to enter description</empty>
+      </formattedtextfield>
+
+    </sheetdata>
+  </windowclass>
+
+  <windowclass name="imagewindow">
+		<datasource>image</datasource>
+		<frame>imagebox</frame>
+		<sharable />
+		<minimize>minimized_image</minimize>
+		<sizelimits>
+			<dynamic>
+				<hostcontrol />
+			</dynamic>
+			<maximum>
+				<width>1100</width>
+				<height>1100</height>
+			</maximum>
+			<minimum>
+				<width>200</width>
+				<height>200</height>
+			</minimum>
+		</sizelimits>
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<script file="scripts/imagewindow.lua"/>
+		
+		
+		
+		<sheetdata>
+			<imagecontrol name="image">
+				<bounds>22,24,-24,-25</bounds>
+				<indicators>
+					<availability>indicator_sent</availability>
+					<locked>indicator_locked</locked>
+					<loading>indicator_loading</loading>
+					<zoom>indicator_zoom</zoom>
+					<shortcuts>indicator_shortcuts</shortcuts>
+				</indicators>
+				<shortcut>
+					<icon>pin</icon>
+					<hotspot>2,21</hotspot>
+				</shortcut>
+				<drawingdefaultsize>500,500</drawingdefaultsize>
+				<script file="scripts/imagewindow_image.lua" />
+			</imagecontrol>	
+			<imagecontrol name="features_image">
+				<bounds>22,24,-24,-25</bounds>
+				<indicators>
+					<availability>indicator_sent</availability>
+					<locked>indicator_locked</locked>
+					<loading>indicator_loading</loading>
+					<zoom>indicator_zoom</zoom>
+					<shortcuts>indicator_shortcuts</shortcuts>
+				</indicators>
+				<shortcut>
+					<icon>pin</icon>
+					<hotspot>2,21</hotspot>
+				</shortcut>
+				<drawingdefaultsize>500,500</drawingdefaultsize>
+				<script file="scripts/imagewindow_image.lua" />
+			</imagecontrol>
+			<imagecontrol name="play_image">
+				<bounds>22,24,-24,-25</bounds>
+				<indicators>
+					<availability>indicator_sent</availability>
+					<locked>indicator_locked</locked>
+					<loading>indicator_loading</loading>
+					<zoom>indicator_zoom</zoom>
+					<shortcuts>indicator_shortcuts</shortcuts>
+				</indicators>
+				<shortcut>
+					<icon>pin</icon>
+					<hotspot>2,21</hotspot>
+				</shortcut>
+				<drawingdefaultsize>500,500</drawingdefaultsize>
+				<script file="scripts/imagewindow_image.lua" />
+			</imagecontrol>
+
+      <checkbox name="toggle_mapinfo">
+        <bounds>30,0,30,19</bounds>
+        <script>
+		
+		
+		
+		
+		
+		
+          function onClickDown(button, x, y)
+            setState(not getState());
+
+            local windowState = (User.isHost() and window.toggle_mapinfo.getState());
+            window.mapinfo.setVisible(windowState);
+            
+            local gridScale = 1;
+	        local gridUnit = "";
+		        
+			if not window.getDatabaseNode().getChild("gridscale") then
+				local nodeGridScale = window.getDatabaseNode().createChild("gridscale","number");
+				nodeGridScale.setValue(gridScale);
+			end
+			
+			if not window.getDatabaseNode().getChild("gridunit") then
+				local nodeGridUnit = window.getDatabaseNode().createChild("gridunit","string");
+				nodeGridUnit.setValue(gridUnit);
+			end
+            
+          end
+        </script>
+        <stateicons>
+          <on>button_mapinfo_on</on>
+          <off>button_mapinfo_off</off>
+        </stateicons>
+        <tooltip>
+          <text>Toggle Map Information</text>
+        </tooltip>
+      </checkbox>
+
+      <subwindow name="mapinfo">
+        <bounds>60,0,250,240</bounds>
+        <class>mapinfo</class>
+        <script>
+          function onInit()
+            local isHost = User.isHost();
+            local windowState = (User.isHost() and window.toggle_mapinfo.getState());
+
+            window.mapinfo.setVisible(windowState);
+            window.toggle_mapinfo.setVisible(isHost);
+							
+          end
+        </script>
+      </subwindow>
+      
+      <scrollercontrol name="winscroll">
+				<bounds>-70,-75,40,38</bounds>
+				<target>image</target>
+				<button>
+					<normal>button_scrollerpan</normal>
+					<pressed>button_scrollerpan_down</pressed>
+					<zoom>button_zoomer</zoom>
+					<zoompressed>button_zoomer_down</zoompressed>
+				</button>
+			</scrollercontrol>
+<!--test-->
+<numberfield name="toolbars">
+				<bounds>0,0,1,1</bounds>
+			<invisible />
+				<script>
+					function onValueChanged()
+						window.updateToolBar();
+					end
+				</script>
+			</numberfield>
+			<buttoncontrol name="toggle_toolbars">
+				<anchored>
+					<left>
+						<parent>image</parent>
+						<anchor>left</anchor>
+						<offset>1</offset>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>34</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>tool_toggle_30</normal>
+				</icon>
+				<frame>
+					<name>toolbar_30</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<invisible />
+				<script>
+					function onButtonPress()
+						if (window.toolbars.getValue() == 0) then
+							window.toolbars.setValue(1);
+						else
+							window.toolbars.setValue(0);
+						end
+						window.updateToolBar();
+					end
+				</script>
+			</buttoncontrol>
+			<genericcontrol name="h1">
+				<anchored>
+					<left>
+						<parent>toggle_toolbars</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>5</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<toolbar_30 name="toolbar_draw">
+				<anchored>
+					<left>
+						<parent>h1</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+				</anchored>
+				<button>
+					<id>mask</id>
+					<icon>tool_mask_30</icon>
+					<tooltip>Mask Mode</tooltip>
+				</button>
+				<button>
+					<id>paint</id>
+					<icon>tool_paint_30</icon>
+					<tooltip>Drawing Mode</tooltip>
+				</button>
+				<button>
+					<id>erase</id>
+					<icon>tool_erase_30</icon>
+					<tooltip>Eraser Mode</tooltip>
+				</button>
+				<toggle />
+				<invisible />
+				<script>
+					function onValueChanged()
+						if window.image.getDrawingTool() then
+							if window.image.getDrawingTool() == "erase" then
+								setActive("erase");
+							else
+								setActive("paint");
+							end
+						elseif window.image.getMaskTool() then
+							setActive("mask");
+						else
+							setActive("");
+						end
+					end
+					
+					function onButtonPress(id)
+						if id == "paint" then
+							if window.image.getDrawingTool() ~= "paint" then
+								window.image.setDrawingTool("paint");
+							else
+								window.image.setDrawingTool("");
+							end
+						elseif id == "erase" then
+							if window.image.getDrawingTool() ~= "erase" then
+								window.image.setDrawingTool("erase");
+							else
+								window.image.setDrawingTool("");
+							end
+						elseif id == "mask" then
+							if not window.image.getMaskTool() then
+								window.image.setMaskEnabled(true);
+								window.image.setMaskTool("unmaskselection");
+							else
+								window.image.setMaskTool("");
+							end
+						end
+					end
+				</script>
+			</toolbar_30>
+			
+			<genericcontrol name="h2">
+				<anchored>
+					<left>
+						<parent>toolbar_draw</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>5</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<buttoncontrol name="toggle_layers">
+				<anchored>
+					<left>
+						<parent>h2</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>34</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>tool_layers_30</normal>
+				</icon>
+				<frame>
+					<name>toolbar_30</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<invisible />
+				<script>
+					local showlayerbar = 0;
+					
+					function getValue()
+						return showlayerbar;
+					end
+					
+					function onButtonPress()
+						if showlayerbar > 0 then
+							showlayerbar = 0;
+						else
+							showlayerbar = 1;
+						end
+						window.updateToolBar();
+					end
+				</script>
+			</buttoncontrol>
+			<toolbar_30 name="toolbar_layers">
+				<anchored>
+					<left>
+						<parent>toggle_layers</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+				</anchored>
+				<invisible/>
+				<button>
+					<id>layer_background</id>
+					<icon>tool_layers_background_30</icon>
+					<tooltip>Background Layer</tooltip>
+				</button>
+				<button>
+					<id>layer_features</id>
+					<icon>tool_layers_features_30</icon>
+					<tooltip>Features Layer</tooltip>
+				</button>
+				<button>
+					<id>layer_play</id>
+					<icon>tool_layers_play_30</icon>
+					<tooltip>Play Layer</tooltip>
+				</button>
+				<toggle />
+				<invisible />
+				<script>
+					function onInit()
+						super.onInit();
+						setActive("layer_play");
+					end
+					
+					function onButtonPress(sID)
+						if (sID == "layer_background") then
+							setActive("layer_background");
+							window.showLayer("background");
+						elseif (sID == "layer_features") then
+							setActive("layer_features");
+							window.showLayer("features");
+						elseif (sID == "layer_play") then
+							setActive("layer_play");
+							window.showLayer("play");
+						end
+					end
+				</script>
+			</toolbar_30>
+			
+			<genericcontrol name="h3">
+				<anchored>
+					<left>
+						<parent>toolbar_layers</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>5</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<buttoncontrol name="toggle_grid">
+				<anchored>
+					<left>
+						<parent>h3</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>34</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>tool_grid_30</normal>
+				</icon>
+				<frame>
+					<name>toolbar_30</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<invisible />
+				<script>
+					local showgridbar = 0;
+					
+					function getValue()
+						return showgridbar;
+					end
+					
+					function onButtonPress()
+						if showgridbar > 0 then
+							showgridbar = 0;
+						else
+							showgridbar = 1;
+						end
+						window.updateToolBar();
+					end
+				</script>
+			</buttoncontrol>
+			<toolbar_30 name="toolbar_grid">
+				<anchored>
+					<left>
+						<parent>toggle_grid</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+				</anchored>
+				<invisible/>
+				<button>
+					<id>gridleft</id>
+					<icon>tool_left_30</icon>
+					<tooltip>Move Grid Left</tooltip>
+				</button>
+				<button>
+					<id>gridright</id>
+					<icon>tool_right_30</icon>
+					<tooltip>Move Grid Right</tooltip>
+				</button>
+				<button>
+					<id>gridup</id>
+					<icon>tool_up_30</icon>
+					<tooltip>Move Grid Up</tooltip>
+				</button>
+				<button>
+					<id>griddown</id>
+					<icon>tool_down_30</icon>
+					<tooltip>Move Grid Down</tooltip>
+				</button>
+				<button>
+					<id>gridplus</id>
+					<icon>tool_plus_30</icon>
+					<tooltip>Make Grid Larger</tooltip>
+				</button>
+				<button>
+					<id>gridminus</id>
+					<icon>tool_minus_30</icon>
+					<tooltip>Make Grid Smaller</tooltip>
+				</button>
+				<script>
+					function onButtonPress(sID)
+						local gridsize = window.play_image.getGridSize();
+						local ox, oy = window.play_image.getGridOffset();
+						
+						if (sID == "gridleft") then
+							ox = ox - 1;
+							window.play_image.setGridOffset(ox, oy);
+						elseif (sID == "gridright") then
+							ox = ox + 1;
+							window.play_image.setGridOffset(ox, oy);
+						elseif (sID == "gridup") then
+							oy = oy - 1;
+							window.play_image.setGridOffset(ox, oy);
+						elseif (sID == "griddown") then
+							oy = oy + 1;
+							window.play_image.setGridOffset(ox, oy);
+						elseif (sID == "gridplus") then
+							gridsize = gridsize + 1;
+							window.play_image.setGridSize(gridsize);
+						elseif (sID == "gridminus") then
+							gridsize = gridsize - 1;
+							window.play_image.setGridSize(gridsize);
+						end
+					end
+				</script>
+			</toolbar_30>
+			
+			<genericcontrol name="h4">
+				<anchored>
+					<left>
+						<parent>toolbar_grid</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>5</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<buttoncontrol name="toggle_xycoord">
+				<anchored>
+					<left>
+						<parent>h4</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>34</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>tool_xycoord_30</normal>
+				</icon>
+				<frame>
+					<name>toolbar_30</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<invisible />
+				<script>
+					local showxycoordbar = 0;
+					
+					function getValue()
+						return showxycoordbar;
+					end
+					
+					function onButtonPress()
+						if showxycoordbar > 0 then
+							showxycoordbar = 0;
+						else
+							showxycoordbar = 1;
+						end
+						window.updateToolBar();
+					end
+				</script>
+			</buttoncontrol>
+			
+			<genericcontrol name="h5">
+				<anchored>
+					<left>
+						<parent>toggle_xycoord</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>image</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>5</width>
+						<height>34</height>
+					</size>
+				</anchored>
+				<invisible />
+			</genericcontrol>
+<genericcontrol name="xycoordbar">
+				<anchored>
+					<left>
+						<parent>toggle_toolbars</parent>
+						<anchor>left</anchor>
+					</left>
+					<top>
+						<parent>toggle_toolbars</parent>
+						<anchor>bottom</anchor>
+						<offset>5</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>toolbar_30</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<invisible />
+			</genericcontrol>
+			<stringcontrol name="xycoordinates">
+				<anchored>
+					<left>
+						<parent>xycoordbar</parent>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<parent>xycoordbar</parent>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<parent>xycoordbar</parent>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<bottom>
+						<parent>xycoordbar</parent>
+						<anchor>bottom</anchor>
+						<offset>-2</offset>
+					</bottom>
+				</anchored>
+				<font>toolbar_hud</font>
+				<center />
+				<invisible />
+				<readonly />
+			</stringcontrol>
+
+			
+			
+			
+			
+			<viewerlist>
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>21</offset>
+					</left>
+					<bottom>
+						<anchor>bottom</anchor>
+						<offset>-27</offset>
+					</bottom>
+				</anchored>
+			</viewerlist>
+      
+      <closebutton_image />
+    </sheetdata>
+	</windowclass>
+
+	<windowclass name="imagesmall">
+		<sizelimits>
+			<minimum>
+				<height>10</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<windowopencontrol name="open">
+				<bounds>0,0,20,20</bounds>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<class>imagewindow</class>
+				<description>
+					<field>name</field>
+				</description>
+        <script file="scripts/adventurelistshortcut.lua" />
+      </windowopencontrol>
+			<linkstringfield name="name">
+				<bounds>25,1,-1,20</bounds>
+				<empty>&#171; New Drawing &#187;</empty>
+				<selectioncolor>#90ffffff</selectioncolor>
+				<font>sheettext</font>
+				<linktarget>open</linktarget>
+			</linkstringfield>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="imagelist">
+		<frame>scrollboxfortabs</frame>
+		<softclose />
+		<placement>
+			<size>
+				<width>275</width>
+				<height>350</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+			<minimum>
+				<width>200</width>
+				<height>290</height>
+			</minimum>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<genericcontrol>
+				<bounds>16,21,30,177</bounds>
+				<icon>title_images</icon>
+			</genericcontrol>
+			<windowlist name="list">
+				<bounds>50,25,-30,-34</bounds>
+				<datasource>.</datasource>
+				<class>imagesmall</class>
+				<sortfields>name</sortfields>
+				<footer>footer_narrow</footer>
+				<allowcreate />
+				<allowdelete />
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.name.getValue() &gt; w2.name.getValue();
+					end;
+					
+					function onFilter(w)
+						local f = string.lower(window.filter.getValue());
+						
+						if f == "" then
+							return true;
+						end
+						
+						if string.find(string.lower(w.name.getValue()), f, 0, true) then
+							return true;
+						end
+						
+						return false;
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<bounds>-105,-61,45,27</bounds>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			<buttoncontrol>
+				<bounds>-55,-58,34,25</bounds>
+				<icon>
+					<normal>button_newwindow</normal>
+					<pressed>button_newwindowdown</pressed>
+				</icon>
+				<class>imagewindow</class>
+				<script>
+					function onButtonPress()
+						local node = window.getDatabaseNode();
+						if node then
+							node = node.createChild();
+							if node then
+								Interface.openWindow(class[1], node.getNodeName());
+							end
+						end
+					end
+				</script>
+			</buttoncontrol>
+			<categoryselectioncontrol>
+				<bounds>24,-39,-24,-1</bounds>
+				<targetcontrol>list</targetcontrol>
+			</categoryselectioncontrol>
+
+			<filter name="filter">
+				<bounds>55,-70,-50,20</bounds>
+				<target>list</target>
+				<trigger>filtertrigger</trigger>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<bounds>20,-85,21,41</bounds>
+				<target>filter</target>
+			</filtertrigger>
+
+      <closebutton_scrollbox />
+    </sheetdata>
+	</windowclass>
+</root>

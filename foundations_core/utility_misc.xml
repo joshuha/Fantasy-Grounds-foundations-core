@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="portraitselection_entry">
+		<sizelimits>
+			<minimum>
+				<height>75</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<portraitselectioncontrol name="portrait">
+				<bounds>0,0,-1,-1</bounds>
+				<base>charlist_base</base>
+				<mask>charlist_mask</mask>
+				<script>
+					function onDoubleClick(x, y)
+						activate();
+						window.windowlist.window.close();
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						draginfo.setType("portraitselection");
+						draginfo.setStringData(getFile());
+						draginfo.setIcon("button_dragtarget");
+						
+						dragging = true;
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+				</script>
+			</portraitselectioncontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="portraitselection">
+		<frame>framebox</frame>
+		<placement>
+			<size>
+				<width>460</width>
+				<height>300</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<sheetdata>
+			<windowlist name="portraits">
+				<class>portraitselection_entry</class>
+				<bounds>30,30,-30,-30</bounds>
+				<columns>
+					<width>75</width>
+					<fillwidth />
+				</columns>
+				<script>
+					function onInit()
+						getWindows()[1].close();
+					
+						for k, v in ipairs(User.getPortraitFileList()) do
+							local wnd = NodeManager.createWindow(self);
+							if wnd then
+								wnd.portrait.setFile(v);
+							end
+						end
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<bounds>-60,-50,45,27</bounds>
+				<target>portraits</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+		
+			<closebutton />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="pointerselection">
+		<placement>
+			<size>
+				<width>210</width>
+				<height>215</height>
+			</size>
+		</placement>
+		<sheetdata>
+			<genericcontrol>
+				<bounds>0,0,210,205</bounds>
+				<script file="scripts/pointerselection.lua" />
+			</genericcontrol>
+		
+			<closebutton />
+		</sheetdata>
+	</windowclass>
+	
+	<template name="lightingselection">
+		<genericcontrol>
+			<light>
+				<system>FFFFFFFF</system>
+				<window>FFFFFFFF</window>
+				<control>FFFFFFFF</control>
+				<content>FFFFFFFF</content>
+			</light>
+			<script>
+				function onClickDown(button, x, y)
+					return true;
+				end
+
+				function onClickRelease(button, x, y)
+					Interface.setLighting(light[1].system[1], light[1].window[1], light[1].control[1], light[1].content[1]);
+					window.close();
+					return true;
+				end
+			</script>
+		</genericcontrol>
+	</template>
+	
+	<windowclass name="lightingselection">
+		<frame name="framebox" />
+		<placement>
+			<size>
+				<width>165</width>
+				<height>460</height>
+			</size>
+		</placement>
+		<sheetdata>
+			<lightingselection name="day">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>30</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>30</offset>
+					</left>
+					<size>
+						<width>100</width>
+						<height>100</height>
+					</size>
+				</anchored>
+				<icon>lighting_day</icon>
+				<light>
+				</light>
+			</lightingselection>
+			<lightingselection name="night">
+				<anchored>
+					<to>day</to>
+					<position>below</position>
+					<size>
+						<height>100</height>
+					</size>
+				</anchored>
+				<icon>lighting_night</icon>
+				<light>
+					<window>FFFFB8A4</window>
+				</light>
+			</lightingselection>
+			<lightingselection name="fire">
+				<anchored>
+					<to>night</to>
+					<position>below</position>
+					<size>
+						<height>100</height>
+					</size>
+				</anchored>
+				<icon>lighting_fire</icon>
+				<light>
+					<window>FFB1C6F4</window>
+				</light>
+			</lightingselection>
+			<lightingselection name="forest">
+				<anchored>
+					<to>fire</to>
+					<position>below</position>
+					<size>
+						<height>100</height>
+					</size>
+				</anchored>
+				<icon>lighting_forest</icon>
+				<light>
+					<window>FFE0FDE6</window>
+				</light>
+			</lightingselection>
+			
+			<closebutton />
+		</sheetdata>
+	</windowclass>
+</root>

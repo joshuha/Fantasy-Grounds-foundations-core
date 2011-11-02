@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="note">
+		<frame>storybox</frame>
+		<placement>
+			<size>
+				<width>250</width>
+				<height>306</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_note</minimize>
+		<playercontrol />
+		<nodelete />
+		<sharable />
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<sheetdata>
+			<jpgreferencecontrol name="open">
+				<bounds>13,8,20,20</bounds>
+				<class>note</class>
+			</jpgreferencecontrol>
+
+			<stringfield name="name">
+				<bounds>45,10,-20,20</bounds>
+				<empty>&#171; New Note &#187;</empty>
+				<font>note-title</font>
+				<nodrag />
+				<nodragselect />
+			</stringfield>
+
+			<stringfield name="text">
+				<bounds>10,45,-15,-15</bounds>
+				<multilinespacing>16</multilinespacing>
+				<font>statblock-r-med</font>
+				<selectioncolor>#FFD296</selectioncolor>
+			</stringfield>
+			
+			<scrollercontrol>
+				<anchored>
+					<to>text</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>text</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<closebutton />
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="notesmall">
+		<sizelimits>
+			<minimum>
+				<height>10</height>
+			</minimum>
+		</sizelimits>
+		<playercontrol />
+		<nodelete />
+		<script file="scripts/campaign_list_record.lua" />
+		<sheetdata>
+			<jpgreferencecontrol name="open">
+				<bounds>0,0,20,20</bounds>
+				<class>note</class>
+			</jpgreferencecontrol>
+			
+			<genericcontrol name="access">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-2</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>14</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<invisible />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						window.unshare();
+						return true;
+					end
+				</script>
+			</genericcontrol>
+			<genericcontrol name="modified">
+				<anchored>
+					<right>
+						<parent>access</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>12</width>
+						<height>18</height>
+					</size>
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			
+			<stringcontrol name="owner">
+				<anchored>
+					<right>
+						<parent>modified</parent>
+						<anchor>left</anchor>
+						<offset>-2</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheettext</font>
+				<invisible />
+				<static />
+			</stringcontrol>
+
+			<linkstringfield name="name">
+				<anchored>
+					<left>
+						<parent>open</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<right>
+						<parent>owner</parent>
+						<anchor>left</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<empty>&#171; New Note &#187;</empty>
+				<font>sheettext</font>
+				<linktarget>open</linktarget>
+			</linkstringfield>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="notelist">
+		<frame>scrollboxfortabs</frame>
+		<dynamic />
+		<placement>
+			<size>
+				<width>275</width>
+				<height>350</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+			<minimum>
+				<width>200</width>
+				<height>220</height>
+			</minimum>
+		</sizelimits>
+		<softclose />
+		<nodelete />
+		<sheetdata>
+			<genericcontrol>
+				<bounds>16,21,30,179</bounds>
+				<icon>title_notes</icon>
+			</genericcontrol>
+
+			<windowlist name="list">
+				<bounds>50,25,-30,-34</bounds>
+				<datasource>.</datasource>
+				<class>notesmall</class>
+				<footer>footer_narrow</footer>
+				<allowcreate />
+				<allowdelete />
+				<script>
+					function onSortCompare(w1, w2)
+						return w1.name.getValue() &gt; w2.name.getValue();
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol>
+				<bounds>-105,-61,45,27</bounds>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<jpgnewcontrol>
+				<bounds>-55,-58,34,25</bounds>
+				<class>note</class>
+			</jpgnewcontrol>
+			
+			<closebutton_scrollbox />
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="charsheetmini_basic">
+		<placement>
+			<size>
+				<width>360</width>
+				<height>220</height>
+			</size>
+		</placement>
+		<nodelete />
+		<sheetdata>
+			
+		</sheetdata>
+	</windowclass>
+</root>

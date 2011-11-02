@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<!-- DEFAULTS -->
+	<font name="default">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="defaultstringcontrol">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="defaultnumbercontrol">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="defaulttitlefont">
+		<fgffile name="graphics/fonts/dnd4e-bold-10.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="mini_name">
+		<fgffile name="graphics/fonts/dnd4e-regular-8.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="mini_name_selected">
+		<fgffile name="graphics/fonts/dnd4e-bold-10.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheetnumber">
+		<fgffile name="graphics/fonts/dnd4e-bold-11.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheetnumbersmall">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheettext">
+		<fgffile name="graphics/fonts/dnd4e-regular-10.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheettextsmall">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheettextblock">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheettextcycler">
+		<fgffile name="graphics/fonts/dnd4e-regular-11.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheetlabel">
+		<fgffile name="graphics/fonts/dnd4e-bold-10.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheetlabelsmall">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheetlabelsmallbold">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="sheetlabelinline">
+		<fgffile name="graphics/fonts/dnd4e-regular-8.fgf" />
+		<color value="#808080" />
+	</font>
+	<font name="sheetlabelmini">
+		<fgffile name="graphics/fonts/dnd4e-regular-8.fgf" />
+		<color value="#000000" />
+	</font>
+
+	<!-- PROTECTED CHAT (FG Expected) -->
+	<font name="chatfont">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#261A12" />
+	</font>
+	<font name="chatitalicfont">
+		<fgffile name="graphics/fonts/dnd4e-italic-9.fgf" />
+		<color value="#261A12" />
+	</font>
+	<font name="chatbolditalicfont">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#261A12" />
+	</font>
+	<font name="emotefont">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#880000" />
+	</font>
+	<font name="narratorfont">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#261A12" />
+	</font>
+	<font name="systemfont">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#660066" />
+	</font>
+	<font name="msgfont">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#660066" />
+	</font>
+	<font name="oocfont">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#005500" />
+	</font>
+	
+	<!-- CUSTOM CHAT -->
+	<font name="chatnpcfont">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000066" />
+	</font>
+	<font name="chatgmfont">
+		<fgffile name="graphics/fonts/dnd4e-bolditalic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="whisperfont">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#660066" />
+	</font>
+
+	<!-- TITLES - REQUIRED? -->
+	<font name="titlefont">
+		<fgffile name="graphics/fonts/title.fgf" />
+		<color value="#000000" />
+	</font>
+
+	<!-- DRAGGING - REQUIRED -->
+	<font name="draglabel">
+		<fgffile name="graphics/fonts/draglabel.fgf" />
+		<color value="#000000" />
+	</font>
+	
+	<!-- DICE RESULTS - REQUIRED -->
+	<font name="diemod">
+		<fgffile name="graphics/fonts/diemod.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="diemodsmall">
+		<fgffile name="graphics/fonts/diemodsmall.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="dieresult">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#ffffff" />
+	</font>
+
+	<!-- HOT KEYS -->
+	<font name="hotkey">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#ffffcc" />
+	</font>
+
+	<!-- MODIFIER STACK -->
+	<font name="modcollector">
+		<fgffile name="graphics/fonts/diemod.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="modcollectorlabel">
+		<fgffile name="graphics/fonts/modcollectorlabel.fgf" />
+		<color value="#000000" />
+	</font>
+
+	<!-- CHARACTER SHEET -->
+	<font name="charsheet_light">
+		<fgffile name="graphics/fonts/dnd4e-bold-10.fgf" />
+		<color value="#238b23" />
+	</font>
+	<font name="charsheet_bloodied">
+		<fgffile name="graphics/fonts/dnd4e-bold-10.fgf" />
+		<color value="#cd2626" />
+	</font>
+	<font name="charsheet_dead">
+		<fgffile name="graphics/fonts/dnd4e-bold-10.fgf" />
+		<color value="#7f7f7f" />
+	</font>
+
+	<!-- COMBAT TRACKER -->
+	<font name="ct_header">
+		<fgffile name="graphics/fonts/dnd4e-regular-8.fgf" />
+		<color value="#FFF1E3D5" />
+	</font>
+	<font name="ct_label">
+		<fgffile name="graphics/fonts/dnd4e-bold-10.fgf" />
+		<color value="#FFF1E3D5" />
+	</font>
+	<font name="ct_labelnumber">
+		<fgffile name="graphics/fonts/dnd4e-bold-11.fgf" />
+		<color value="#FF000000" />
+	</font>
+	<font name="ct_text">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="ct_name">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="ct_active">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="ct_healthy_number">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#008b00" />
+	</font>
+	<font name="ct_ltwound_number">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#238b23" />
+	</font>
+	<font name="ct_bloodied_number">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#cd2626" />
+	</font>
+	<font name="ct_dead_number">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#7f7f7f" />
+	</font>
+	<font name="ct_healthy_string">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#008b00" />
+	</font>
+	<font name="ct_ltwound_string">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#238b23" />
+	</font>
+	<font name="ct_bloodied_string">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#cd2626" />
+	</font>
+	<font name="ct_dead_string">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#7f7f7f" />
+	</font>
+	
+	<!-- STORY -->
+	<font name="story-h">
+		<fgffile name="graphics/fonts/dnd4elothsc-regular-14.fgf" />
+		<color value="#5A1E33" />
+	</font>
+	<font name="story-bi">
+		<fgffile name="graphics/fonts/dnd4e-bolditalic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="story-b">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="story-i">
+		<fgffile name="graphics/fonts/dnd4e-italic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="story-r">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="story-title">
+		<fgffile name="graphics/fonts/dnd4elothsc-regular-14.fgf" />
+		<color value="#ffffff" />
+	</font>
+
+	<!-- NOTES -->
+	<font name="note-title">
+		<fgffile name="graphics/fonts/dnd4elothsc-regular-12.fgf" />
+		<color value="#ffffff" />
+	</font>
+
+	<!-- REFERENCE - STAT BLOCKS -->
+	<font name="statblock-r-med">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-i-med">
+		<fgffile name="graphics/fonts/dnd4e-italic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-b-med">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-bi-med">
+		<fgffile name="graphics/fonts/dnd4e-bolditalic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-r-large">
+		<fgffile name="graphics/fonts/dnd4e-regular-11.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-i-large">
+		<fgffile name="graphics/fonts/dnd4e-italic-11.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-b-large">
+		<fgffile name="graphics/fonts/dnd4e-bold-11.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-bi-large">
+		<fgffile name="graphics/fonts/dnd4e-bolditalic-11.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-r-small">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-i-small">
+		<fgffile name="graphics/fonts/dnd4e-italic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-b-small">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="statblock-bi-small">
+		<fgffile name="graphics/fonts/dnd4e-bolditalic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="wstatblock-b-med">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#ffffff" />
+	</font>
+	<font name="wstatblock-b-large">
+		<fgffile name="graphics/fonts/dnd4e-bold-11.fgf" />
+		<color value="#ffffff" />
+	</font>
+
+	<!-- REFERENCE -->
+	<font name="reference-bi">
+		<fgffile name="graphics/fonts/dnd4e-bolditalic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="reference-b">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="reference-i">
+		<fgffile name="graphics/fonts/dnd4e-italic-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="reference-r">
+		<fgffile name="graphics/fonts/dnd4e-regular-9.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="reference-h">
+		<fgffile name="graphics/fonts/dnd4elothsc-regular-14.fgf" />
+		<color value="#FF123D5D" />
+	</font>
+	<font name="reference-section">
+		<fgffile name="graphics/fonts/dnd4evecnasc-regular-11.fgf" />
+		<color value="#ffffffff" />
+	</font>
+	<font name="reference-chapter">
+		<fgffile name="graphics/fonts/dnd4evecnasc-regular-11.fgf" />
+		<color value="#ffffffff" />
+	</font>
+	<font name="reference-article">
+		<fgffile name="graphics/fonts/dnd4elothsc-regular-10.fgf" />
+		<color value="#ff123D5D" />
+	</font>
+	<font name="list-title">
+		<fgffile name="graphics/fonts/dnd4elothsc-regular-14.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="list-subtitle">
+		<fgffile name="graphics/fonts/dnd4evecnasc-regular-10.fgf" />
+		<color value="#000000" />
+	</font>
+	<font name="list-item">
+		<fgffile name="graphics/fonts/dnd4e-bold-9.fgf" />
+		<color value="#000000" />
+	</font>
+
+	<!-- INDEX FRAMES -->
+	<font name="index-title">
+		<fgffile name="graphics/fonts/dnd4elothsc-regular-16.fgf" />
+		<color value="#FFFFFF" />
+	</font>
+	<font name="index-title-highlight">
+		<fgffile name="graphics/fonts/dnd4elothsc-regular-16.fgf" />
+		<color value="#000000" />
+	</font>
+
+	<!-- SPECIALTY LABELS -->
+	<font name="sct-header">
+		<fgffile name="graphics/fonts/dnd4e-bold-10.fgf" />
+		<color value="#261A12" />
+	</font>
+</root>

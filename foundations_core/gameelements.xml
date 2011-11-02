@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<die name="d4">
+		<icon>d4icon</icon>
+		<position>370,-78</position>
+	</die>
+	
+	<die name="d6">
+		<icon>d6icon</icon>
+		<position>320,-78</position>
+	</die>
+	
+	<die name="d8">
+		<icon>d8icon</icon>
+		<position>270,-78</position>
+	</die>
+	
+	<die name="d10">
+		<icon>d10icon</icon>
+		<position>220,-78</position>
+	</die>
+	
+	<die name="d12">
+		<icon>d12icon</icon>
+		<position>170,-78</position>
+	</die>
+	
+	<die name="d20">
+		<icon>d20icon</icon>
+		<position>120,-78</position>
+	</die>
+
+	<die name="d100">
+		<icon>d10icon</icon>
+	</die>
+
+	<die name="gmdie">
+		<icon>gmdieicon</icon>
+	</die>
+	
+	<customdie name="d3">
+		<model>d6</model>
+		<menuicon>customdice</menuicon>
+		<script>
+			function onValue(result)
+				return math.ceil(result/2);
+			end
+		</script>
+	</customdie>
+	<customdie name="d2">
+		<model>d6</model>
+		<menuicon>customdice</menuicon>
+		<script>
+			function onValue(result)
+				return math.ceil(result/3);
+			end
+		</script>
+	</customdie>
+	<customdie name="d0">
+		<model>d6</model>
+		<menuicon>customdice</menuicon>
+		<script>
+			function onValue(result)
+				return 0;
+			end
+		</script>
+	</customdie>
+	<diebox>
+		<frame name="diebox" />
+		<margin value="16" numbertailmargin="10" />
+		<secreticon name="gmdie" />
+		<tracker diecountmargin="20" diecountfont="narratorfont" />
+	</diebox>
+	
+	<pollbox>
+		<frame name="diebox" />
+		<margin value="21" numbertailmargin="10" />
+		<icons empty="poll_empty" positive="poll_check" negative="poll_negative" />
+	</pollbox>
+	
+	<viewerlistsettings>
+		<portrait file="data\icons\mini_portrait.png" mask="data\icons\mini_portrait_mask.png" />
+		<spacing value="0" />
+	</viewerlistsettings>
+
+	<hotkeybar>
+		<frame>hotkeybox</frame>
+		<location>
+			<offset>0</offset>
+			<height>33</height>
+		</location>
+		<title>
+			<frame>hotkeytitlebox</frame>
+			<frameoffset>2,-2,7,5</frameoffset>
+			<margin>2,1</margin>
+			<font>hotkey</font>
+		</title>
+		<label>
+			<margin>10,12</margin>
+			<font>hotkey</font>
+		</label>
+		<iconmargins>0,3,0,0</iconmargins>
+	</hotkeybar>
+
+	<categoryselectionsettings>
+		<iconposition normal="6,6" selected="6,4" />
+		<baseicon normal="tab_base1" selected="tab_base1s" />
+		<baseicon normal="tab_base2" selected="tab_base2s" />
+		<baseicon normal="tab_base3" selected="tab_base3s" />
+		<baseicon normal="tab_base4" selected="tab_base4s" />
+		<baseicon normal="tab_base5" selected="tab_base5s" />
+		<decalicon name="tab_icon1" />
+		<decalicon name="tab_icon2" />
+		<decalicon name="tab_icon3" />
+		<decalicon name="tab_icon4" />
+		<decalicon name="tab_icon5" />
+		<decalicon name="tab_icon6" />
+		<decalicon name="tab_icon7" />
+		<decalicon name="tab_icon8" />
+	</categoryselectionsettings>
+
+	<tooltip>
+		<frame name="tooltipbox" margins="7,4,10,7" wrapwidth="300" />
+		<font name="mini_name" />
+	</tooltip>
+</root>

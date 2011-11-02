@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the readme.txt file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<panel name="shortcuts">
+		<class>shortcuts</class>
+		<bounds>-98,0,98,-33</bounds>
+	</panel>
+
+	<panel name="characterlist">
+		<class>characterlist</class>
+		<anchored>
+			<top>
+				<anchor>top</anchor>
+			</top>
+			<right>
+				<parent>shortcuts</parent>
+				<anchor>left</anchor>
+			</right>
+			<left>
+				<anchor>left</anchor>
+			</left>
+			<size>
+				<height>82</height>
+			</size>
+		</anchored>
+	</panel>
+	
+	<!-- <panel name="chat" modes="host,client">
+		<class>chat</class>
+		<bounds>15,90,390,-118</bounds>
+	</panel> -->
+
+	<panel name="identitylist" modes="host">
+		<class>identitylist</class>
+		<anchored>
+			<top>
+				<!-- <parent>chat</parent> -->
+				<anchor>bottom</anchor>
+				<offset>-50</offset>
+			</top>
+			<left>
+				<!-- <parent>chat</parent> -->
+				<anchor>left</anchor>
+				<offset>90</offset>
+			</left>
+			<right>
+				<parent>shortcuts</parent>
+				<anchor>left</anchor>
+			</right>
+			<size>
+				<height>20</height>
+			</size>
+		</anchored>
+	</panel>
+
+	<panel name="modifierstack" modes="host,client">
+		<class>modifierstack</class>
+		<bounds>20,-100,64,57</bounds>
+	</panel>
+
+</root>

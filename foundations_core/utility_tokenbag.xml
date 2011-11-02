@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="tokenbag">
+		<frame>tokenbag</frame>
+		<placement>
+			<size>
+				<width>350</width>
+				<height>353</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+			<minimum>
+				<width>350</width>
+				<height>353</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<tokenbag>
+				<bounds>13,13,-28,-30</bounds>
+				<tokenarea>0,0,-1,-49</tokenarea>
+				<bagbar>
+					<rect>0,-49,-1,49</rect>
+					<frame>tokenbagbar</frame>
+					<slotsize>49,49</slotsize>
+				</bagbar>
+				<bag>
+					<icon>tokenbag</icon>
+					<top>tokenbagtop</top>
+					<up>tokenbagup</up>
+					<custom>tokenbagcustom</custom>
+					<labelframe>mini_name</labelframe>
+					<labelfont>mini_name</labelfont>
+				</bag>
+				<grid>
+					<width>46</width>
+					<height>50</height>
+				</grid>
+			</tokenbag>
+			
+			<closebutton_tokenbag />
+		</sheetdata>
+	</windowclass>
+</root>

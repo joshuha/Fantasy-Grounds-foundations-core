@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="charsheet_main">
+		<placement>
+			<size>
+				<width>252</width>
+				<height>611</height>
+			</size>
+		</placement>
+		<nodelete />
+		<sheetdata>
+			<tokenfield name="combattoken">
+				<bounds>432,30,60,51</bounds>
+				<empty>indicator_emptytoken</empty>
+			</tokenfield>
+		
+			<!-- ACTIVATE IDENTITY -->
+			<buttoncontrol>
+				<bounds>-40,30,23,22</bounds>
+				<icon>
+					<normal>button_identityactivate</normal>
+					<pressed>button_identityactivate_down</pressed>
+				</icon>
+				<script>
+					function onInit()
+						if User.isLocal() then
+							setVisible(false);
+						end
+					end
+					
+					function onButtonPress()
+						if User.isLocal() then
+							return;
+						end
+						
+						if User.isHost() then
+							GmIdentityManager.addIdentity(window.name.getValue());
+						else
+							local identityname = window.getDatabaseNode().getName();
+
+							User.setCurrentIdentity(identityname);
+
+							if CampaignRegistry and CampaignRegistry.colortables and CampaignRegistry.colortables[identityname] then
+								local colortable = CampaignRegistry.colortables[identityname];
+								User.setCurrentIdentityColors(colortable.color or "000000", colortable.blacktext or false);
+							end
+						end
+					end
+				</script>
+			</buttoncontrol>
+		
+			<!-- OVERVIEW -->
+			<genericcontrol name="overviewframe">
+				<bounds>15,20,415,70</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+
+			<labeledstring name="name">
+				<anchored>
+					<to>overviewframe</to>
+					<position>insidetopleft</position>
+					<offset>15,10</offset>
+					<size>
+						<width>250</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<label>name</label>
+				<tabtarget next="" prev="" />
+			</labeledstring>
+
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<includefile source="templates_charsheet.xml" />
+
+	<includefile source="charsheet_main.xml" />
+	<includefile source="charsheetmini_main.xml" />
+	
+	<includefile source="charsheet_toplevel.xml" />
+</root>

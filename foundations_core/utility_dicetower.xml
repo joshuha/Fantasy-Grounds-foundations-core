@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<!-- CHAT ICON -->
+	<icon name="dicetower_icon">graphics/dicetower/dicetower_icon.png</icon>
+
+	<!-- FRAMES FOR DESKTOP ICON -->
+	<framedef name="dicetower_normal">
+		<bitmap>graphics/dicetower/dicetower_normal.png</bitmap>
+		<middle>0,0,90,90</middle>
+	</framedef>
+	<framedef name="dicetower_drop">
+		<bitmap>graphics/dicetower/dicetower_drop.png</bitmap>
+		<middle>0,0,90,90</middle>
+	</framedef>
+
+	<windowclass name="dicetower">
+		<sheetdata>
+			<genericcontrol>
+				<tooltip>
+					<text>Dice Tower</text>
+				</tooltip>
+				<bounds>0,0,90,90</bounds>
+				<frame>
+					<name>dicetower_normal</name>
+				</frame>
+				<droptypes>
+					<type>dice</type>
+				</droptypes>
+				<stateframe>
+					<drophover>
+						<name>dicetower_drop</name>
+						<nobaseframe />
+					</drophover>
+				</stateframe>
+				<script>
+					function onInit()
+						DiceTowerManager.registerControl(self);
+					end
+					
+					function onDrop(x, y, draginfo)
+						return DiceTowerManager.onDrop(draginfo);
+					end
+				</script>
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<panel name="dicetower" modes="host,client">
+		<class>dicetower</class>
+		<bounds>
+			<anchored>
+				<bottom>
+					<anchor>bottom</anchor>
+					<offset>-43</offset>
+				</bottom>
+				<right>
+					<anchor>right</anchor>
+					<offset>-113</offset>
+				</right>
+				<size>
+					<width>90</width>
+					<height>90</height>
+				</size>
+			</anchored>
+		</bounds>
+	</panel>
+</root>
+		

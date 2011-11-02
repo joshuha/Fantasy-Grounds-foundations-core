@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="npc_combat">
+		<!-- <script>
+			function onInit()
+				updateDisplay();
+			end
+
+			function updateDisplay()
+				local index = npctype.getIndex();
+
+				scroller_creature.setVisible(index ~= 2 and index ~= 3);
+			end
+		</script> -->
+		<sheetdata>
+			<!-- <radiogroup name="npctype">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>5</offset>
+					</top>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<optionwidth>90</optionwidth>
+					<labels>NPC</labels>
+					<values>NPC</values>
+				</parameters>
+				<script>
+					function onValueChanged()
+						window.updateDisplay();
+					end
+				</script>
+			</radiogroup>
+			 -->
+		
+			<!-- DESCRIPTION -->
+			<formattedtextfield name="text">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+					</top>
+					<bottom>
+						<anchor>bottom</anchor>
+					</bottom>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<right>
+						<anchor>right</anchor>
+					</right>
+				</anchored>
+				<font>
+					<normal>chatfont</normal>
+					<bold>narratorfont</bold>
+					<italic>chatitalicfont</italic>
+					<bolditalic>chatbolditalicfont</bolditalic>
+					<title>defaultstringcontrol</title>
+				</font>
+				<linkicon>
+					<link>button_openwindow</link>
+					<emptylink>button_emptytarget</emptylink>
+				</linkicon>
+				<selectioncolor>#FFD296</selectioncolor>
+				<footer>footer_narrow</footer>
+				<empty>Click to enter description</empty>
+			</formattedtextfield>
+			<scrollercontrol>
+				<anchored>
+					<to>text</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>text</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+		</sheetdata>
+	</windowclass>
+	

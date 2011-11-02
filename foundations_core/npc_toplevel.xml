@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="npc">
+		<frame>charsheet</frame>
+		<placement>
+			<size>
+				<width>340</width>
+				<height>512</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>340</width>
+				<height>410</height>
+			</minimum>
+			<maximum>
+				<width>1024</width>
+				<height>1024</height>
+			</maximum>
+			<dynamic />
+		</sizelimits>
+		<minimize>minimized_npc</minimize>
+		<nodelete />
+		<tooltip>
+			<field>name</field>
+		</tooltip>
+		<sheetdata>
+			<!-- NAME -->
+			<genericcontrol name="nameframe">
+				<bounds>38,20,-35,35</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<windowopencontrol>
+				<anchored>
+					<to>nameframe</to>
+					<position>insidetopleft</position>
+					<offset>13,8</offset>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<class>npc</class>
+				<description>
+					<field>name</field>
+				</description>
+			</windowopencontrol>
+			<stringfield name="name">
+				<anchored>
+					<top>
+						<parent>nameframe</parent>
+						<anchor>top</anchor>
+						<offset>9</offset>
+					</top>
+					<left>
+						<parent>nameframe</parent>
+						<anchor>left</anchor>
+						<offset>35</offset>
+					</left>
+					<right>
+						<parent>nameframe</parent>
+						<anchor>right</anchor>
+						<offset>-15</offset>
+					</right>
+				</anchored>
+				<empty>&#171; New Personality &#187;</empty>
+				<font>sheettext</font>
+			</stringfield>
+			<tokenfield name="token">
+				<bounds>13,25,25,25</bounds>
+				<empty>indicator_emptytoken</empty>
+			</tokenfield>
+			<buttoncontrol>
+				<bounds>-36,27,23,22</bounds>
+				<icon>
+					<normal>button_identityactivate</normal>
+					<pressed>button_identityactivate_down</pressed>
+				</icon>
+				<script>
+					function onButtonPress()
+						GmIdentityManager.addIdentity(window.name.getValue());
+					end
+				</script>
+			</buttoncontrol>
+
+						
+			<genericcontrol name="tabcontentframe">
+				<bounds>10,54,-25,-15</bounds>
+				<frame>
+					<name>sheetgroup</name>
+					<offset>0,1,0,0</offset>
+				</frame>
+			</genericcontrol>
+
+			<subwindow name="combat">
+				<anchored>
+					<to>tabcontentframe</to>
+					<position>over</position>
+					<offset>-15,-8</offset>
+				</anchored>
+				<class>npc_combat</class>
+			</subwindow>
+			
+			<scrollercontrol name="combat_scroller">
+				<bounds>-79,-50,45,27</bounds>
+				<target>combat</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+				<invisible />
+			</scrollercontrol>
+			<tabcontrol name="tabs">
+				<bounds>-22,50,18,83</bounds>
+				<tab>
+					<icon>tab_main</icon>
+					<subwindow>combat</subwindow>
+					<scroller>combat_scroller</scroller>
+				</tab>
+			</tabcontrol>
+			
+			<closebutton_charsheetmini />
+		</sheetdata>
+	</windowclass>
+</root>

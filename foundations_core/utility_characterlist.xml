@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="charactersheetlistentry">
+		<sizelimits>
+			<minimum>
+				<height>92</height>
+			</minimum>
+			<maximum>
+				<width>235</width>
+			</maximum>
+		</sizelimits>
+		<frame>modifier</frame>
+		<script>
+			function onInit()
+				if User.isHost() then
+					registerMenuItem("Clear owner", "erase", 4);
+				end
+			end
+			
+			function onMenuSelection(selection)
+				if User.isHost() then
+					if selection == 4 then
+						local owner = getDatabaseNode().getOwner();
+						if owner then
+							getDatabaseNode().removeHolder(owner);
+						end
+					end
+				end
+			end
+		</script>
+		<sheetdata>
+			<genericcontrol name="base">
+				<bounds>0,0,-1,-1</bounds>
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+
+					function onClickRelease(button, x, y)
+						Interface.openWindow("charsheet", window.getDatabaseNode().getNodeName());
+						return true;
+					end
+
+					function onDrag(button, x, y, draginfo)
+						if User.isHost() then
+							if dragging then
+								return true;
+							end
+							
+							local identityname = window.getDatabaseNode().getName();
+
+							draginfo.setType("playercharacter");
+							draginfo.setTokenData("portrait_" .. identityname .. "_token");
+							draginfo.setShortcutData("charsheet", "charsheet." .. identityname);
+							draginfo.setStringData(window.name.getValue());
+
+							local base = draginfo.createBaseData();
+							base.setType("token");
+							base.setTokenData("portrait_" .. identityname .. "_token");
+
+							dragging = true;
+							return true;
+						end
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+				</script>
+			</genericcontrol>
+
+			<genericcontrol name="portrait">
+				<bounds>10,10,72,72</bounds>
+				<icon>charlist_base</icon>
+				<disabled />
+				<script>
+					function onInit()
+						setIcon("portrait_" .. window.getDatabaseNode().getName() .. "_charlist");
+					end
+				</script>
+			</genericcontrol>
+
+			<stringfield name="name">
+				<bounds>90,20,-10,20</bounds>
+				<font>sheettext</font>
+				<empty>&#171; Unnamed &#187;</empty>
+				<disabled />
+			</stringfield>
+			
+			<stringcontrol name="owner">
+				<bounds>90,60,-10,20</bounds>
+				<font>chatfont</font>
+				<disabled />
+				<script>
+					function update()
+						local ownername = window.getDatabaseNode().getOwner();
+						if not ownername then
+							ownername = "None";
+						end
+						
+						setValue("Owned by: " .. ownername);
+					end
+					
+					function onInit()
+						window.getDatabaseNode().onObserverUpdate = update;
+						update();
+					end
+				</script>
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charactersheetlist">
+		<frame>indexbox</frame>
+		<placement>
+			<size>
+				<width>530</width>
+				<height>425</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>530</width>
+				<height>425</height>
+			</minimum>
+			<dynamic>
+				<resize>both</resize>
+			</dynamic>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<text>Character Selection</text>
+				</title>
+			</windowtitlebar>
+
+			<!-- LIST -->
+			<windowlist name="list">
+				<bounds>30,73,-30,-73</bounds>
+				<datasource>.</datasource>
+				<class>charactersheetlistentry</class>
+				<allowcreate />
+				<allowdelete />
+				<columns>
+					<width>235</width>
+					<fillwidth />
+				</columns>
+			</windowlist>
+			<scrollercontrol>
+				<bounds>-98,-80,45,27</bounds>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<closebutton_library />
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="library_booklistcategory">
+		<frame>rowshade</frame>
+		<sizelimits>
+			<minimum>
+				<height>30</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<stringfield name="name">
+				<bounds>5,8,-1,15</bounds>
+				<font>sheetlabel</font>
+				<static />
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="library_booklistentry">
+		<sizelimits>
+			<minimum>
+				<height>70</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<genericcontrol name="thumbnail">
+				<bounds>4,0,63,63</bounds>
+				<script>
+					function onHover(oncontrol)
+						window.name.onHover(oncontrol);
+					end
+					
+					function onClickDown(button, x, y)
+						return true;
+					end
+
+					function onClickRelease(button, x, y)
+						return window.name.activate();
+					end
+				</script>
+			</genericcontrol>
+			<staticlinkstringfield name="name">
+				<bounds>70,20,-1,20</bounds>
+				<font>sheetlabel</font>
+				<script>
+					function activate()
+						local pagesource = window.getDatabaseNode().getChild("entries");
+						window.windowlist.window.pagelist.setDatabaseNode(pagesource);
+					end
+					
+					function onInit()
+						onValueChanged();
+					end
+					
+					function onValueChanged()
+						window.thumbnail.setIcon("module_" .. getValue());
+					end
+				</script>
+			</staticlinkstringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="library_pagelistentry">
+		<sizelimits>
+			<minimum>
+				<height>20</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<windowreferencefield name="librarylink">
+				<bounds>5,0,20,20</bounds>
+				<icon>
+					<normal>button_openwindow</normal>
+					<pressed>button_emptytarget</pressed>
+				</icon>
+				<description>
+					<field>name</field>
+				</description>
+			</windowreferencefield>
+			<staticlinkstringfield name="name">
+				<bounds>25,0,-1,-1</bounds>
+				<font>sheettext</font>
+				<linktarget>librarylink</linktarget>
+			</staticlinkstringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="library">
+		<frame>indexbox</frame>
+		<placement>
+			<size>
+				<width>700</width>
+				<height>550</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>500</width>
+				<height>250</height>
+			</minimum>
+			<dynamic />
+		</sizelimits>
+		<sheetdata>
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<text>Library</text>
+				</title>
+			</windowtitlebar>
+
+			<!-- BOOK LIST -->
+			<windowlist name="booklist">
+				<class>library_booklistentry</class>
+				<datasource>library</datasource>
+				<useallmodules/>
+				<bounds>30,73,250,-73</bounds>
+				<frame>
+					<name>sheetgroup</name>
+					<offset>9,10,9,6</offset>
+				</frame>
+				<script file="scripts/library_booklist.lua" />
+			</windowlist>
+			<scrollercontrol name="booklist_scroller">
+				<anchored>
+				    <left>
+						<anchor>left</anchor>
+						<offset>240</offset>
+					</left>
+					<top>
+						<parent>booklist</parent>
+						<anchor>bottom</anchor>
+						<offset>10</offset>
+					</top>
+				</anchored>
+				<target>booklist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<!-- PAGE LIST -->
+			<windowlist name="pagelist">
+				<class>library_pagelistentry</class>
+				<bounds>290,73,-37,-73</bounds>
+				<frame>
+					<name>sheetgroup</name>
+					<offset>9,10,9,6</offset>
+				</frame>
+				<script>
+					function onFilter(w)
+						local f = string.lower(window.filter.getValue());
+						
+						if f == "" then
+							return true;
+						end
+						
+						if string.find(string.lower(w.name.getValue()), f, 0, true) then
+							return true;
+						end
+						
+						return false;
+					end
+
+					function onSortCompare(w1, w2)
+					   return w1.name.getValue() &gt; w2.name.getValue();
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol name="pagelist_scroller">
+				<anchored>
+					<to>pagelist</to>
+					<position>insidebottomright</position>
+				</anchored>
+				<target>pagelist</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<!-- FILTERS -->
+			<filter name="filter">
+				<anchored>
+					<left>
+						<parent>booklist_scroller</parent>
+						<anchor>right</anchor>
+						<offset>30</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-65</offset>
+					</right>
+					 <top>
+						<parent>pagelist</parent>
+						<anchor>bottom</anchor>
+						<offset>12</offset>
+					</top>
+					<bottom>
+						<anchor>bottom</anchor>
+						<offset>-45</offset>
+					</bottom>
+				</anchored>
+				<target>pagelist</target>
+				<trigger>filtertrigger</trigger>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<anchored>
+					<left>
+						<parent>booklist_scroller</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>pagelist</parent>
+						<anchor>bottom</anchor>
+						<offset>10</offset>
+					</top>
+					<bottom>
+						<parent>booklist_scroller</parent>
+						<anchor>bottom</anchor>
+					</bottom>
+					<size>
+						<width>21</width>
+					</size>
+				</anchored>
+				<target>filter</target>
+			</filtertrigger>
+			
+			<closebutton_library />
+		</sheetdata>
+	</windowclass>
+</root>

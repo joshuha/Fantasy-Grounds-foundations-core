@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<!-- Player character selection -->
+	<windowclass name="identityselection_newentry">
+		<sizelimits>
+			<minimum>
+				<height>92</height>
+			</minimum>
+			<maximum>
+				<width>235</width>
+			</maximum>
+		</sizelimits>
+		<frame>modifier</frame>
+		<script>
+			function requestResponse(result, identity)
+				if result and identity then
+					windowlist.window.close();
+				end
+			end
+		</script>
+		<sheetdata>
+			<stringcontrol name="label">
+				<bounds>40,37,-10,20</bounds>
+				<font>sheettext</font>
+				<empty>&#171; Create New Character &#187;</empty>
+			</stringcontrol>
+
+			<genericcontrol name="base">
+				<bounds>0,0,-1,-1</bounds>
+				<script file="scripts/identityselection_newentry_base.lua" />
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="identityselection_entry">
+		<sizelimits>
+			<minimum>
+				<height>92</height>
+			</minimum>
+			<maximum>
+				<width>235</width>
+			</maximum>
+		</sizelimits>
+		<frame>modifier</frame>
+		<script file="scripts/identityselection_entry.lua" />
+		<sheetdata>
+			<genericcontrol name="base">
+				<bounds>0,0,-1,-1</bounds>
+				<script file="scripts/identityselection_entry_base.lua" />
+			</genericcontrol>
+
+			<genericcontrol name="portrait">
+				<bounds>10,10,72,72</bounds>
+				<icon>charlist_base</icon>
+				<disabled />
+			</genericcontrol>
+			<portraitselectioncontrol name="localportrait">
+				<bounds>10,10,72,72</bounds>
+				<base>charlist_base</base>
+				<mask>charlist_mask</mask>
+				<invisible />
+				<script>
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("portraitselection") then
+							local portraitfile = draginfo.getStringData();
+							setFile(portraitfile);
+							User.setLocalIdentityPortrait(window.localdatabasenode, portraitfile);
+							return true;
+						end
+					end
+				</script>
+			</portraitselectioncontrol>
+			
+			<genericcontrol name="error">
+				<bounds>-65,15,56,56</bounds>
+				<icon>indicator_error</icon>
+				<disabled />
+				<invisible />
+			</genericcontrol>
+
+			<stringcontrol name="name">
+				<bounds>90,20,-10,20</bounds>
+				<font>sheettext</font>
+				<empty>&#171; Unnamed &#187;</empty>
+				<disabled />
+			</stringcontrol>
+
+			<stringcontrol name="campaign">
+				<bounds>90,60,-10,20</bounds>
+				<font>chatfont</font>
+				<disabled />
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="identityselection">
+		<frame>indexbox</frame>
+		<placement>
+			<size>
+				<width>530</width>
+				<height>425</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>530</width>
+				<height>425</height>
+			</minimum>
+			<dynamic>
+				<resize>both</resize>
+			</dynamic>
+		</sizelimits>
+		<sheetdata>
+			<stringcontrol name="nopositionsave">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</stringcontrol>
+			
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<text>Character Selection</text>
+				</title>
+			</windowtitlebar>
+
+			<!-- LIST -->
+			<windowlist name="list">
+				<bounds>30,73,-30,-73</bounds>
+				<class>identityselection_entry</class>
+				<columns>
+					<width>235</width>
+					<fillwidth />
+				</columns>
+				<script file="scripts/identityselection_list.lua" />
+			</windowlist>
+			<scrollercontrol>
+				<bounds>-98,-80,45,27</bounds>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<closebutton_library />
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the readme.txt file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root version="2.6">
+	<includefile source="templates_toolbar.xml" />
+	  
+	<template name="runtime_icon">
+		<genericcontrol>
+			<anchored>
+				<left>
+					<anchor>left</anchor>
+				</left>
+				<right>
+					<anchor>right</anchor>
+				</right>
+				<top>
+					<anchor>top</anchor>
+				</top>
+				<size>
+					<height>0</height>
+				</size>
+			</anchored>
+		</genericcontrol>
+	</template>
+	<template name="jpgcategorycontrol">
+		<categoryselectioncontrol>
+			<gmonly />
+			<script>
+				function onInit()
+					if gmonly and not User.isHost() then
+						setVisible(false);
+					end
+				end
+			</script>
+		</categoryselectioncontrol>
+	</template>
+	
+	<template name="jpgnewcontrol">
+		<buttoncontrol>
+			<icon>
+				<normal>button_newwindow</normal>
+				<pressed>button_newwindowdown</pressed>
+			</icon>
+			<script>
+				local bAllowClientNew = true;
+				
+				function onInit()
+					if gmonly then
+						bAllowClientNew = false;
+						if not User.isHost() then
+							setVisible(false);
+						end
+					end
+				end
+				
+				function onButtonPress()
+					if User.isHost() then
+						local node = NodeManager.createChild(window.getDatabaseNode());
+						if node then
+							local wnd = Interface.openWindow(class[1], node.getNodeName());
+							if wnd and wnd.name then
+								wnd.name.setFocus();
+							end
+						end
+					elseif bAllowClientNew then
+						Interface.requestNewClientWindow(class[1], window.getDatabaseNode().getNodeName());
+					end
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+	
+	<template name="jpgreferencecontrol">
+		<windowreferencecontrol>
+			<icon>
+				<normal>button_openwindow</normal>
+				<pressed>button_openwindowdown</pressed>
+			</icon>
+			<description>
+				<field>name</field>
+			</description>
+		</windowreferencecontrol>
+	</template>
+
+	<template name="jpgreferencefield">
+		<windowreferencefield>
+			<icon>
+				<normal>button_openwindow</normal>
+				<pressed>button_openwindowdown</pressed>
+			</icon>
+			<description>
+				<field>name</field>
+			</description>
+		</windowreferencefield>
+	</template>
+	
+	<template name="spacercontrol">
+		<genericcontrol>
+			<anchored>
+				<left>
+					<anchor>left</anchor>
+				</left>
+				<right>
+					<anchor>right</anchor>
+				</right>
+				<top>
+					<anchor>top</anchor>
+				</top>
+				<size>
+					<height>0</height>
+				</size>
+			</anchored>
+			<disabled />
+			<script>
+				function onInit()
+					if anchor then
+						if relative then
+							setAnchor("top", anchor[1], "bottom", "relative", 0);
+						else
+							setAnchor("top", anchor[1], "bottom", "absolute", 0);
+						end
+					end
+					if height then
+						setAnchoredHeight(tonumber(height[1]) or 0);
+					end
+				end
+			</script>
+		</genericcontrol>
+	</template>
+
+	<template name="link_smart">
+		<buttoncontrol>
+			<anchored>
+				<size>
+					<width>20</width>
+					<height>20</height>
+				</size>
+			</anchored>
+			<icon>
+				<normal>button_openwindow</normal>
+				<pressed>button_openwindowdown</pressed>
+			</icon>
+			<allowdrop />
+			<script file="scripts/link_smart.lua" />
+		</buttoncontrol>
+	</template>
+	
+	<template name="link_self">
+		<buttoncontrol>
+			<anchored>
+				<size>
+					<width>20</width>
+					<height>20</height>
+				</size>
+			</anchored>
+			<icon>
+				<normal>button_openwindow</normal>
+				<pressed>button_openwindowdown</pressed>
+			</icon>
+			<script file="scripts/link_self.lua" />
+		</buttoncontrol>
+	</template>
+	
+	<template name="jpgnumberfield">
+		<numberfield>
+			<noreset />
+			<script>
+				function onInit()
+					if gmonly and not User.isHost() then
+						setReadOnly(true);
+					end
+					
+					if rollable then
+						addBitmapWidget("indicator_fullattackdie").setPosition("bottomleft", -1, -4);
+					end
+				end
+				
+				function onWheel(n)
+					if isReadOnly() then
+						return false;
+					end
+					
+					if not OptionsManager.isMouseWheelEditEnabled() then
+						return false;
+					end
+					
+					setValue(getValue() + n);
+					return true;
+				end
+			</script>
+		</numberfield>
+	</template>
+
+	<template name="basicnumberfield">
+		<jpgnumberfield>
+			<frame>
+				<name>bonus</name>
+				<offset>5,5,5,5</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>5,5,5,5</offset>
+			</keyeditframe>
+			<stateframe>
+				<drophilight>
+					<name>sheetfocus</name>
+					<offset>5,5,5,5</offset>
+				</drophilight>
+			</stateframe>
+			<droptypes>
+				<type>number</type>
+			</droptypes>
+			<font>sheetnumber</font>
+		</jpgnumberfield>
+	</template>
+
+	<template name="jpgdiefield">
+		<diefield>
+			<noreset />
+			<droptypes>
+				<type>dice</type>
+			</droptypes>
+			<script>
+				widgetShadow = nil;
+				
+				function onInit()
+					getDatabaseNode().onUpdate = onUpdate;
+					onUpdate(getDatabaseNode());
+
+					widgetShadow = addBitmapWidget("diceshadow");
+					if widgetShadow then
+						local x,y,w,h = 0,0,0,0;
+					
+						if shadow then
+							if shadow[1].offset then
+								local sX, sY = string.match(shadow[1].offset[1], "(%d+),(%d+)");
+								x = tonumber(sX) or 0;
+								y = tonumber(sY) or 0;
+							end
+							if shadow[1].size then
+								local sW, sH = string.match(shadow[1].size[1], "(%d+),(%d+)");
+								w = tonumber(sW) or 0;
+								h = tonumber(sH) or 0;
+							else
+								if anchored and anchored[1].size then
+									if anchored[1].size[1].width then
+										w = tonumber(anchored[1].size[1].width[1]) or 0;
+									end
+									if anchored[1].size[1].height then
+										h = tonumber(anchored[1].size[1].height[1]) or 0;
+									end
+								end
+							end
+							if w > 2 then
+								w = w - 2;
+							end
+							if h > 2 then
+								h = h - 2;
+							end
+						end
+
+						widgetShadow.setPosition("center", x, y);
+						widgetShadow.setSize(w, h);
+					
+						checkShadow();
+					end
+				end
+				
+				function onUpdate(source)
+					if self.onValueChanged then
+						self.onValueChanged();
+					end
+					checkShadow();
+				end
+				
+				function setVisibility(bVisible)
+					setVisible(bVisible);
+					checkShadow();
+				end
+				
+				function checkShadow()
+					if widgetShadow then
+						local bVisible = isVisible() and not getDatabaseNode().getValue();
+						widgetShadow.setVisible(isVisible() and not getDatabaseNode().getValue());
+					end
+				end
+			</script>
+		</diefield>
+	</template>
+	
+	<template name="jpglist">
+		<windowlist>
+			<skipempty />
+			<noscroll />
+			<script file="scripts/template_jpglist.lua" />
+		</windowlist>
+	</template>
+	
+	<template name="jpglistitemlabel">
+		<stringfield name="label">
+			<font>sheettextsmall</font>
+			<frame>
+				<name>textline</name>
+				<offset>0,1,0,0</offset>
+			</frame>
+			<script file="scripts/template_jpglistitemlabel.lua" />
+		</stringfield>
+	</template>
+	
+	<template name="textlistitemvalue">
+		<stringfield name="value">
+			<font>sheettext</font>
+			<multilinespacing>20</multilinespacing>
+			<frame>
+				<name>textline</name>
+			</frame>
+			<script file="scripts/template_textlistitemvalue.lua" />
+		</stringfield>
+	</template>
+
+	<template name="button_toggle">
+		<genericcontrol>
+			<script file="scripts/template_button_toggle.lua" />
+		</genericcontrol>
+	</template>
+	
+	<template name="ctnumberfield">
+		<jpgnumberfield>
+			<font>sheetnumbersmall</font>
+			<frame>
+				<name>modifier</name>
+				<offset>2,2,2,2</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>2,2,2,2</offset>
+			</keyeditframe>
+			<gmonly />
+			<script file="scripts/template_ctnumberfield.lua" />
+		</jpgnumberfield>
+	</template>
+	
+	<template name="ctstringfield">
+		<stringfield>
+			<font>ct_text</font>
+			<frame>
+				<name>textlinesmall</name>
+				<offset>0,0,0,0</offset>
+			</frame>
+			<script file="scripts/template_ctstringfield.lua" />
+		</stringfield>
+	</template>
+	
+	<template name="combattrackerffsource">
+		<genericcontrol>
+			<script>
+				function onInit()
+					setHoverCursor("hand");
+				end
+			
+				function onDrag(button, x, y, draginfo)
+					if dragging then
+						return true;
+					end
+					
+					draginfo.setType("combattrackerff");
+
+					draginfo.setIcon(icon[1]);
+					draginfo.setStringData(value[1]);
+
+					dragging = true;
+					return true;
+				end
+					
+				function onDragEnd(draginfo)
+					dragging = false;
+				end
+			</script>
+		</genericcontrol>
+	</template>
+
+	<template name="iconcycler">
+		<genericcontrol>
+			<script file="scripts/template_iconcycler.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="checkcounter">
+		<genericcontrol>
+			<stateicons>
+				<on>indicator_checkon</on>
+				<off>indicator_checkoff</off>
+			</stateicons>
+			<spacing>10</spacing>
+			<script file="scripts/template_checkcounter.lua" />
+		</genericcontrol>
+	</template>
+	
+	<template name="labelcycler">
+		<stringcontrol>
+			<stateframe>
+				<hover>
+					<name>sheetfocus</name>
+					<offset>6,5,6,5</offset>
+				</hover>
+			</stateframe>
+			<font>sheettext</font>
+			<static />
+			<script file="scripts/template_labelcycler.lua" />
+		</stringcontrol>
+	</template>
+
+	<template name="labeledstring">
+		<stringfield>
+			<font>sheettext</font>
+			<frame>
+				<name>textline</name>
+			</frame>
+			<script>
+				labelwidget = nil;
+			
+				function onInit()
+					labelwidget = addTextWidget("sheetlabelinline", string.upper(label[1]));
+					
+					local w,h = labelwidget.getSize();
+					labelwidget.setPosition("bottomleft", w/2, h/2-5);
+				end
+			</script>
+		</stringfield>
+	</template>
+	
+	<template name="labeledstringbold">
+		<stringfield>
+			<font>sheettext</font>
+			<frame>
+				<name>textline</name>
+			</frame>
+			<script>
+				labelwidget = nil;
+			
+				function onInit()
+					labelwidget = addTextWidget("sheetlabelmini", string.upper(label[1]));
+					
+					local w,h = labelwidget.getSize();
+					labelwidget.setPosition("bottomleft", w/2, h/2-5);
+				end
+			</script>
+		</stringfield>
+	</template>
+	
+	<template name="checkbox">
+		<iconcycler>
+			<source>
+				<type>number</type>
+			</source>
+			<parameters>
+				<icons>indicator_checkon</icons>
+				<values>on</values>
+				<defaulticon>indicator_checkoff</defaulticon>
+			</parameters>
+			<script>
+				function onInit()
+					if checked and not sourceless then
+						local srcname = getName();
+						if sourcename then
+							srcname = sourcename[1];
+						end
+
+						local nodeInitial = nil;
+						local nodeParent = window.getDatabaseNode();
+						if nodeParent then
+							nodeInitial = nodeParent.getChild(srcname);
+						end
+						
+						super.onInit();
+						
+						if getSourceNode() then
+							if not nodeInitial and not isLocked() then
+								setIndex(1);
+							end
+						else
+							setIndex(1);
+						end
+					else
+						super.onInit();
+					end
+				end
+				
+				function getState()
+					return (getIndex() ~= 0);
+				end
+				
+				function setState(varState)
+					if varState == nil or varState == false or varState == 0 then
+						setIndex(0);
+					else
+						setIndex(1);
+					end
+				end
+			</script>
+		</iconcycler>
+	</template>
+	
+	<template name="radiogroup">
+		<genericcontrol>
+			<stateicons>
+				<on>indicator_checkon</on>
+				<off>indicator_checkoff</off>
+			</stateicons>
+			<script file="scripts/template_radiogroup.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="tabcontrol">
+		<genericcontrol>
+			<tab mergerule="resetandadd" />
+			<frame>
+				<name>tabs</name>
+			</frame>
+			<script file="scripts/template_tabcontrol.lua" />
+		</genericcontrol>
+	</template>
+	
+	<template name="viewerlist">
+		<genericcontrol>
+			<invalididentityicon>miniportrait_base</invalididentityicon>
+			<portraitset>miniportrait</portraitset>
+			<portraitspacing>21</portraitspacing>
+			<script file="scripts/template_viewerlist.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="columnstringfield">
+		<stringfield>
+			<font>sheettextsmall</font>
+			<frame>
+				<name>modifier</name>
+				<offset>7,5,7,5</offset>
+			</frame>
+			<multilinespacing>15</multilinespacing>
+			<selectioncolor>90ffffff</selectioncolor>
+			<script>
+				function updateVisibility(val)
+					if val then
+						if NodeManager.isReadOnly(getDatabaseNode()) and getValue() == "" then
+							setVisible(false);
+						else
+							setVisible(true);
+						end
+					else
+						setVisible(false);
+					end
+				end
+				
+				function onInit()
+					if anchor then
+						setAnchor("top", anchor[1], "bottom", "relative", 6);
+					else
+						setAnchor("top", "", "top", "absolute", 5);
+					end
+					
+					setAnchor("left", "", "left", "absolute", 85);
+					setAnchor("right", "", "right", "absolute", -7);
+					
+					if NodeManager.isReadOnly(getDatabaseNode()) then
+						setFrame(nil);
+						setFont("chatfont");
+						if getValue() == "" then
+							setVisible(false);
+						end
+					end
+					
+					if gmonly and not User.isHost() then
+						setReadOnly(true);
+					end
+				end
+			</script>
+		</stringfield>
+	</template>
+
+	<template name="columnnumberfield">
+		<jpgnumberfield>
+			<noreset />
+			<font>sheettextsmall</font>
+			<frame>
+				<name>modifier</name>
+				<offset>7,4,7,5</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>7,4,7,5</offset>
+			</keyeditframe>
+			<script>
+				function updateVisibility(val)
+					setVisible(val);
+				end
+				
+				function onInit()
+					if super.onInit then
+						super.onInit();
+					end
+					
+					if anchor then
+						setAnchor("top", anchor[1], "bottom", "relative", 6);
+					else
+						setAnchor("top", "", "top", "absolute", 5);
+					end
+					
+					setAnchor("left", "", "left", "absolute", 85);
+					setAnchoredWidth(40);
+					setAnchoredHeight(16);
+					
+					if NodeManager.isReadOnly(getDatabaseNode()) then
+						setFont("chatfont");
+					end
+				end
+			</script>
+		</jpgnumberfield>
+	</template>
+	
+	<template name="columnfieldlabel">
+		<stringcontrol>
+			<font>sheetlabelsmallbold</font>
+			<script>
+				function updateVisibility()
+					if anchor and not window[anchor[1]].isVisible() then
+						setVisible(false);
+					else
+						setVisible(true);
+					end
+				end
+				
+				function onInit()
+					if anchor then
+						if NodeManager.isReadOnly(window[anchor[1]].getDatabaseNode()) then
+							setAnchor("top", anchor[1], "top", "absolute", 2);
+						else
+							setAnchor("top", anchor[1], "top", "absolute", 4);
+						end
+						setAnchor("left", "", "left", "absolute", 0);
+						
+						if not window[anchor[1]].isVisible() then
+							setVisible(false);
+						end
+					end
+				end
+			</script>
+		</stringcontrol>
+	</template>
+
+	<template name="statcolumnnumberfield">
+		<columnnumberfield>
+			<font>statblock-r-med</font>
+			<frame>
+				<name>whitecontrolarea</name>
+				<offset>7,3,7,3</offset>
+			</frame>
+			<keyeditframe>
+				<name>sheetfocus</name>
+				<offset>7,3,7,3</offset>
+			</keyeditframe>
+		</columnnumberfield>
+	</template>
+
+	<template name="statcolumnfieldlabel">
+		<columnfieldlabel>
+			<font>statblock-b-med</font>
+		</columnfieldlabel>
+	</template>
+
+	<template name="statcolumnstringfield">
+		<columnstringfield>
+			<font>statblock-r-med</font>
+		</columnstringfield>
+	</template>
+
+	<template name="filtertrigger">
+		<genericcontrol>
+			<icon>search_icon</icon>
+			<widgetposition>
+				<anchor>bottomleft</anchor>
+				<offsetx>5</offsetx>
+				<offsety>-5</offsety>
+			</widgetposition>
+			<script>
+				function onInit()
+					window[target[1]].setVisible(false);
+				end
+				
+				function onClickDown(button, x, y)
+					return true;
+				end
+				
+				function onClickRelease(button, x, y)
+					if button == 1 then
+						setVisible(false);
+						window[target[1]].setVisible(true);
+						window[target[1]].setFocus();
+						window[target[1]].setSelectionPosition(#(window[target[1]].getValue()) + 1);
+					elseif button == 2 then
+						window[target[1]].setValue("");
+					end
+
+					return true;
+				end
+				
+				function updateWidget(state)
+					if widget and not state then
+						widget.destroy();
+						widget = nil;
+					elseif not widget and state then
+						widget = addBitmapWidget("indicator_checkon");
+						widget.setPosition(widgetposition[1].anchor[1], widgetposition[1].offsetx[1], widgetposition[1].offsety[1]);
+					end
+				end
+			</script>
+		</genericcontrol>
+	</template>
+	
+	<template name="filter">
+		<stringcontrol>
+			<frame>
+				<name>searchframe</name>
+				<offset>37,45,3,12</offset>
+			</frame>
+			<font>sheettext</font>
+			<selectioncolor>#FFD296</selectioncolor>
+			<script file="scripts/template_filter.lua" />
+		</stringcontrol>
+	</template>
+	
+	<template name="linkstringfield">
+		<stringfield>
+			<underlineoffset>-2</underlineoffset>
+			<nodrag />
+			<script file="scripts/template_linkstringfield.lua" />
+		</stringfield>
+	</template>
+	
+	<template name="staticlinkstringfield">
+		<stringfield>
+			<underlineoffset>-2</underlineoffset>
+			<nodrag />
+			<static />
+			<script file="scripts/template_staticlinkstringfield.lua" />
+		</stringfield>
+	</template>
+	
+	<template name="staticlinkstringcontrol">
+		<stringcontrol>
+			<underlineoffset>-2</underlineoffset>
+			<nodrag />
+			<static />
+			<script file="scripts/template_staticlinkstringfield.lua" />
+		</stringcontrol>
+	</template>
+
+	<template name="expandgroupbutton">
+		<genericcontrol name="expand">
+			<icon>expand_icon</icon>				
+			<tooltip>
+				<text>Expand All</text>
+			</tooltip>
+			<script>
+				function onClickDown(button, x, y)
+					return true;
+				end
+
+				function onClickRelease(button, x, y)
+					for k, topwin in pairs(window.grouplist.getWindows()) do
+						topwin.list.setVisible(true);
+					end
+					return true;
+				end
+			</script>
+		</genericcontrol>
+	</template>
+
+	<template name="collapsegroupbutton">
+		<genericcontrol name="collapse">
+			<icon>collapse_icon</icon>
+			<tooltip>
+				<text>Collapse All</text>
+			</tooltip>
+			<script>
+				function onClickDown(button, x, y)
+					return true;
+				end
+
+				function onClickRelease(button, x, y)
+					for k, topwin in pairs(window.grouplist.getWindows()) do
+						topwin.list.setVisible(false);
+					end
+					return true;
+				end
+			</script>
+		</genericcontrol>
+	</template>
+
+	<template name="windowtitlebar">
+		<genericcontrol>
+			<bounds>0,0,-1,40</bounds>
+			<frame>
+				<name>indexboxtitle</name>
+			</frame>
+			<script>
+				local widgetHighlight = nil;
+				local widgetTitle = nil;
+				
+				function onInit()
+					window.onSizeChanged = updatePosition;
+
+					if title then
+						if title[1].text then
+							widgetHighlight = addTextWidget("index-title-highlight", title[1].text[1]);
+							widgetTitle = addTextWidget("index-title", title[1].text[1]);
+							updatePosition();
+						elseif title[1].field then
+							local nodeTitle = window.getDatabaseNode().getChild(title[1].field[1]);
+							if nodeTitle then
+								widgetHighlight = addTextWidget("index-title-highlight", nodeTitle.getValue());
+								widgetTitle = addTextWidget("index-title", nodeTitle.getValue());
+								updatePosition();
+							end
+						end
+					end
+				end
+				
+				function updatePosition()
+					if widgetTitle then
+						local wTitle, hTitle = widgetTitle.getSize();
+						local wWindow, hWindow = window.getSize();
+						local wControl = wTitle + 80;
+						if (wControl > wWindow) then
+							wControl = wWindow;
+						end
+						setStaticBounds((wWindow - wControl) / 2, 0, wControl, 40);
+					end
+				end
+			</script>
+		</genericcontrol>
+	</template>
+
+	<template name="closebutton">
+		<buttoncontrol>
+			<anchored>
+				<top>
+					<anchor>top</anchor>
+				</top>
+				<right>
+					<anchor>right</anchor>
+				</right>
+				<size>
+					<height>24</height>
+					<width>24</width>
+				</size>
+			</anchored>
+			<icon>
+				<normal>button_close</normal>
+				<pressed>button_close_down</pressed>
+				<hover>button_close_hover</hover>
+			</icon>
+			<script>
+				function onButtonPress()
+					window.close();
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+
+	<template name="closebutton_charsheet">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>0</offset>
+				</top>
+				<right>
+					<offset>-8</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+	
+	<template name="closebutton_charsheetmini">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>0</offset>
+				</top>
+				<right>
+					<offset>-8</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+	
+	<template name="closebutton_combattracker">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>13</offset>
+				</top>
+				<right>
+					<offset>-6</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+
+	<template name="closebutton_skillchallengetracker">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>13</offset>
+				</top>
+				<right>
+					<offset>-6</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+
+	<template name="closebutton_image">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>12</offset>
+				</top>
+				<right>
+					<offset>-13</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+	
+	<template name="closebutton_library">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>9</offset>
+				</top>
+				<right>
+					<offset>-15</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+
+	<template name="closebutton_tokenbag">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>0</offset>
+				</top>
+				<right>
+					<offset>-17</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+
+	<template name="closebutton_scrollbox">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>0</offset>
+				</top>
+				<right>
+					<offset>-15</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+
+	<template name="closebutton_referencepage">
+		<closebutton>
+			<anchored>
+				<top>
+					<offset>7</offset>
+				</top>
+				<right>
+					<offset>-10</offset>
+				</right>
+			</anchored>
+		</closebutton>
+	</template>
+</root>

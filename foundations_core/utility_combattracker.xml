@@ -1,0 +1,1785 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="combattracker_effect_target">
+		<script>
+			function onInit()
+				onRefChanged();
+			end
+			
+			function onRefChanged()
+				local nodeTarget = DB.findNode(noderef.getValue());
+				if nodeTarget then
+					local nodeName = nodeTarget.getChild("name");
+					if nodeName then
+						nodeName.onUpdate = onNameUpdated;
+						onNameUpdated(nodeName);
+					end
+				end
+			end
+			
+			function onNameUpdated(nodeName)
+				windowlist.window.onTargetsChanged();
+			end
+		</script>
+		<sheetdata>
+			<stringfield name="type">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+			</stringfield>
+			<stringfield name="noderef">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						window.onRefChanged();
+					end
+				</script>
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="combattracker_effect">
+		<sizelimits>
+			<minimum>
+				<height>22</height>
+			</minimum>
+		</sizelimits>
+		<script file="scripts/combattracker_effect.lua" />
+		<sheetdata>
+			<genericcontrol name="base">
+				<bounds>0,0,-1,-1</bounds>
+				<script>
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onDrop(x, y, draginfo)
+						return window.onDrop(x, y, draginfo);
+					end
+				</script>
+			</genericcontrol>
+			
+			<labelcycler name="expiration">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-50</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>45</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<center />
+				<frame>
+					<name>bonus</name>
+					<offset>2,6,2,1</offset>
+				</frame>
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>2,6,2,1</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>Save|Enc|End N|Start|End</labels>
+					<values>save|encounter|endnext|start|end</values>
+				</parameters>
+				<script>
+					function onValueChanged()
+						window.onExpirationChanged();
+					end
+					
+					function onInit()
+						super.onInit();
+						
+						local sourcenode = window.windowlist.window.initresult.getDatabaseNode();
+						if sourcenode then
+							sourcenode.onUpdate = onValueChanged;
+							window.onExpirationChanged();
+						end
+					end
+
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onDrop(x, y, draginfo)
+						return window.onDrop(x, y, draginfo);
+					end
+				</script>
+			</labelcycler>
+
+			<checkbox name="isactive">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>7</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<checked />
+				<parameters>
+					<icons>button_toggle_on</icons>
+					<defaulticon>button_toggle_off</defaulticon>
+					<tooltips>Active</tooltips>
+					<defaulttooltip>Inactive</defaulttooltip>
+				</parameters>
+			</checkbox>
+			
+			<checkbox name="isgmonly">
+				<anchored>
+					<left>
+						<parent>isactive</parent>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_gm</icons>
+					<defaulticon>button_toggle_visible</defaulticon>
+					<tooltips>Visible to GM</tooltips>
+					<defaulttooltip>Visible to All</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<iconcycler name="apply">
+				<anchored>
+					<left>
+						<parent>isactive</parent>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>12</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>button_toggle_one|button_toggle_single</icons>
+					<values>once|single</values>
+					<tooltips>Apply once|Apply each once</tooltips>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Apply all</defaulttooltip>
+				</parameters>
+			</iconcycler>
+			
+			<spacercontrol name="spacer">
+				<anchor>apply</anchor>
+				<height>5</height>
+			</spacercontrol>
+			
+			<jpglistitemlabel name="label">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<left>
+						<parent>isactive</parent>
+						<anchor>right</anchor>
+						<offset>28</offset>
+					</left>
+					<right>
+						<parent>expiration</parent>
+						<anchor>left</anchor>
+						<offset>-3</offset>
+					</right>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<stateframe>
+					<drophilight>
+						<name>sheetfocus</name>
+						<offset>7,6,7,3</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>combattrackerentry</type>
+				</droptypes>
+				<script>
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onDrop(x, y, draginfo)
+						return window.onDrop(x, y, draginfo);
+					end
+				</script>
+			</jpglistitemlabel>
+
+			<jpgnumberfield name="effectinit">
+				<anchored>
+					<left>
+						<parent>expiration</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>30</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheetnumbersmall</font>
+				<frame>
+					<name>bonus</name>
+					<offset>2,3,2,4</offset>
+				</frame>
+				<keyeditframe>
+					<name>sheetfocus</name>
+					<offset>2,3,2,4</offset>
+				</keyeditframe>
+				<stateframe>
+					<drophilight>
+						<name>sheetfocus</name>
+						<offset>2,3,2,4</offset>
+					</drophilight>
+				</stateframe>
+				<droptypes>
+					<type>number</type>
+				</droptypes>
+				<invisible />
+				<script>
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onDrop(x, y, draginfo)
+						if draginfo.getType() ~= "number" then
+							return window.onDrop(x, y, draginfo);
+						end
+					end
+				</script>
+			</jpgnumberfield>
+
+			<stringfield name="source_name">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+				<script>
+					function onInit()
+						onValueChanged();
+					end
+					
+					function onValueChanged()
+						local nodeSource = DB.findNode(getValue());
+						local sSource = NodeManager.get(nodeSource, "name", "");
+						
+						if sSource == "" then
+							window.source.setVisible(false);
+						else
+							window.source.setValue("Applied by: " .. sSource);
+							window.source.setVisible(true);
+						end
+					end
+				</script>
+			</stringfield>
+			<stringcontrol name="source">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-5</offset>
+					</right>
+					<top>
+						<parent>expiration</parent>
+						<anchor>bottom</anchor>
+					</top>
+				</anchored>
+				<center />
+				<static />
+				<font>sheetlabelsmall</font>
+				<color>#7f000000</color>
+				<nodrag />
+				<nodragselect />
+				<invisible />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						if isVisible() then
+							setSource("");
+						end
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onDrop(x, y, draginfo)
+						return window.onDrop(x, y, draginfo);
+					end
+
+					function setSource(sNode)
+						if not sNode then
+							sNode = "";
+						end
+						
+						window.source_name.setValue(sNode);
+					end
+				</script>
+			</stringcontrol>
+
+			<windowlist name="targets">
+				<bounds>0,0,1,1</bounds>
+				<datasource>.targets</datasource>
+				<class>combattracker_effect_target</class>
+				<invisible />
+				<skipempty />
+			</windowlist>
+			<stringcontrol name="target_name">
+				<anchored>
+					<left>
+						<parent>label</parent>
+						<anchor>left</anchor>
+					</left>
+					<top>
+						<parent>expiration</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<right>
+						<parent>expiration</parent>
+						<anchor>right</anchor>
+						<offset>-105</offset>
+					</right>
+				</anchored>
+				<static />
+				<font>sheetlabelsmall</font>
+				<color>#7f000000</color>
+				<nodrag />
+				<nodragselect />
+				<multilinespacing>15</multilinespacing>
+				<invisible />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						if isVisible() then
+							for keyTarget, winTarget in pairs(window.targets.getWindows()) do
+								winTarget.getDatabaseNode().delete();
+							end
+						end
+					end
+
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onDrop(x, y, draginfo)
+						return window.onDrop(x, y, draginfo);
+					end
+				</script>
+			</stringcontrol>
+			<buttoncontrol name="targeting_add_button">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>0</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<width>15</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_targeting_small</normal>
+					<pressed>button_targeting_small_down</pressed>
+				</icon>
+				<tooltip>
+					<text>Drag onto new effect target</text>
+				</tooltip>
+				<script>
+					function onInit()
+						registerMenuItem("Targeting", "goto", 4);
+						registerMenuItem("Target all allies", "turn", 4, 3);
+						registerMenuItem("Target all non-allies", "mask", 4, 5);
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						draginfo.setType("targeting");
+						draginfo.setIcon("drag_targeting");
+						draginfo.setShortcutData(window.getClass(), window.getDatabaseNode().getNodeName());
+						
+						dragging = true;
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onMenuSelection(selection, subselection)
+						if selection == 4 then
+							if subselection == 3 then
+								TargetingManager.clearTargets("host", window.getDatabaseNode());
+								TargetingManager.addFactionTargetsHost(window.getDatabaseNode(), window.windowlist.window.friendfoe.getStringValue());
+							elseif subselection == 5 then
+								TargetingManager.clearTargets("host", window.getDatabaseNode());
+								TargetingManager.addFactionTargetsHost(window.getDatabaseNode(), window.windowlist.window.friendfoe.getStringValue(), true);
+							end
+						end
+					end
+				</script>
+			</buttoncontrol>
+			
+			<spacercontrol name="spacer">
+				<anchor>target_name</anchor>
+				<height>1</height>
+			</spacercontrol>
+		</sheetdata>
+	</windowclass>
+		
+	<windowclass name="combattracker_target">
+		<sizelimits>
+			<minimum>
+				<height>26</height>
+				<width>26</width>
+			</minimum>
+		</sizelimits>
+		<script>
+			function onInit()
+				onRefChanged();
+			end
+
+			function onRefChanged()
+				local nodeTarget = DB.findNode(noderef.getValue());
+				if nodeTarget then
+					local nodeToken = nodeTarget.getChild("token");
+					if nodeToken then
+						nodeToken.onUpdate = onTokenUpdated;
+						onTokenUpdated(nodeToken);
+					end
+					local nodeName = nodeTarget.getChild("name");
+					if nodeName then
+						nodeName.onUpdate = onNameUpdated;
+						onNameUpdated(nodeName);
+					end
+				end
+			end
+
+			function onTokenUpdated(nodeToken)
+				token.setPrototype(nodeToken.getValue());
+			end
+			
+			function onNameUpdated(nodeName)
+				token.setTooltipText(nodeName.getValue());
+				windowlist.window.onTargetsChanged();
+			end
+			
+			function removeTarget()
+				if type.getValue() == "client" then
+					TargetingManager.removeClientTarget("", windowlist.window.name.getValue(), noderef.getValue());
+				else
+					getDatabaseNode().delete();
+				end
+			end
+		</script>
+		<sheetdata>
+			<tokencontrol name="token">
+				<bounds>3,3,20,20</bounds>
+				<empty>indicator_emptytoken</empty>
+				<disable />
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						window.removeTarget();
+						return true;
+					end
+				</script>
+			</tokencontrol>
+			<stringfield name="type">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						if getValue() == "client" then
+							window.token.setFrame("atwillframe", 3, 3, 2, 2);
+						else
+							window.token.setFrame(nil);
+						end
+					end
+				</script>
+			</stringfield>
+			<stringfield name="noderef">
+				<bounds>0,0,1,1</bounds>
+				<invisible />
+				<script>
+					function onValueChanged()
+						window.onRefChanged();
+					end
+				</script>
+			</stringfield>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="combattracker_entry">
+		<frame>ctentrybox</frame>
+		<sizelimits>
+			<minimum>
+				<height>30</height>
+			</minimum>
+		</sizelimits>
+		<script file="scripts/combattracker_entry.lua" />
+		<sheetdata>
+			<!-- Hidden fields -->
+			<stringfield name="type">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+				<script>
+					function onInit()
+						if User.isHost() and getValue() == "" then
+							setValue("npc");
+						else
+							window.onTypeChanged();
+						end
+					end
+					
+					function onValueChanged()
+						window.onTypeChanged();
+					end
+				</script>
+			</stringfield>
+			<stringfield name="tokenrefid">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+			</stringfield>
+			<stringfield name="tokenrefnode">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+			</stringfield>
+			<numberfield name="tokenscale">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+				<default>1</default>
+				<script>
+					function onValueChanged()
+						window.token.onScaleChanged();
+					end
+				</script>
+			</numberfield>
+			
+			<spacercontrol name="active_spacer_top">
+				<height>5</height>
+				<invisible />
+			</spacercontrol>
+			
+			<!-- Basics -->
+			<genericcontrol name="active">
+				<anchored>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<size>
+						<width>33</width>
+						<height>40</height>
+					</size>
+				</anchored>
+				<icon>indicator_ctpassive</icon>
+				<activeicon>indicator_ctactive</activeicon>
+				<script file="scripts/combattracker_active.lua" />
+			</genericcontrol>
+			<tokenfield name="token">
+				<anchored>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>7</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>33</offset>
+					</left>
+					<size>
+						<height>25</height>
+						<width>25</width>
+					</size>
+				</anchored>
+				<empty>indicator_emptytoken</empty>
+				<script file="scripts/combattracker_token.lua" />
+			</tokenfield>
+			<checkbox name="show_npc">
+				<anchored>
+					<left>
+						<parent>token</parent>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>0</offset>
+					</top>
+					<size>
+						<width>16</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>indicator_visibilityon</icons>
+					<defaulticon>indicator_visibilityoff</defaulticon>
+					<tooltips>Hide NPC</tooltips>
+					<defaulttooltip>Show NPC</defaulttooltip>
+				</parameters>
+				<invisible/>
+				<script>
+					function onValueChanged()
+						window.onVisibilityChanged();
+					end
+				</script>
+			</checkbox>
+			
+			<genericcontrol name="hspacer1">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>6</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+			
+			<windowreferencefield name="link">
+				<anchored>
+					<right>
+						<parent>hspacer1</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>9</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_dragtarget</normal>
+				</icon>
+				<invisible />
+				<script>
+					function onInit()
+						getDatabaseNode().onUpdate = onValueChanged;
+						onValueChanged();
+					end
+					
+					function onValueChanged()
+						if getValue() then
+							setVisible(true);
+						end
+					end
+				</script>
+			</windowreferencefield>
+
+			<genericcontrol name="hspacer2">
+				<anchored>
+					<right>
+						<parent>link</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>3</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+			
+			<button_toggle name="activateeffects">
+				<anchored>
+					<right>
+						<parent>hspacer2</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>link</parent>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_effect_small</icon>
+				<script>
+					function onValueChanged()
+						window.setEffectsVisible(getValue());
+						window.windowlist.onEntrySectionToggle();
+					end
+				</script>
+			</button_toggle>
+			
+			<button_toggle name="activatetargeting">
+				<anchored>
+					<right>
+						<parent>activateeffects</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>link</parent>
+						<anchor>top</anchor>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_targeting</icon>
+				<script>
+					function onValueChanged()
+						window.setTargetingVisible(getValue());
+						window.windowlist.onEntrySectionToggle();
+					end
+				</script>
+			</button_toggle>
+
+			<genericcontrol name="hspacer3">
+				<anchored>
+					<right>
+						<parent>activatetargeting</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>6</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+			
+			<iconcycler name="friendfoe">
+				<anchored>
+					<right>
+						<parent>hspacer3</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>link</parent>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>indicator_ctfffriend|indicator_ctffneutral|indicator_ctfffoe</icons>
+					<values>friend|neutral|foe</values>
+					<tooltips>Friendly|Neutral|Hostile</tooltips>
+					<defaulticon>indicator_ctffempty</defaulticon>
+				</parameters>
+				<gmonly />
+				<script>
+					function onValueChanged()
+						window.onFactionChanged();
+					end
+				</script>
+			</iconcycler>
+
+			<genericcontrol name="hspacer4">
+				<anchored>
+					<right>
+						<parent>friendfoe</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>8</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+			<genericcontrol name="hspacer5">
+				<anchored>
+					<right>
+						<parent>hspacer4</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>0</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+
+			<genericcontrol name="hspacer8">
+				<anchored>
+					<right>
+						<parent>hspacer5</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>135</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+
+			
+			<genericcontrol name="hspacer9">
+				<anchored>
+					<right>
+						<parent>hspacer8</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>5</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+
+			<ctnumberfield name="initresult">
+				<anchored>
+					<right>
+						<parent>hspacer9</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>9</offset>
+					</top>
+					<size>
+						<width>34</width>
+						<height>23</height>
+					</size>
+				</anchored>
+				<hideonvalue>0</hideonvalue>
+				<script>
+					function update()
+						window.windowlist.applySort();
+					end
+				</script>
+			</ctnumberfield>
+
+			<ctstringfield name="name">
+				<anchored>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>12</offset>
+					</top>
+					<left>
+						<parent>token</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<right>
+						<parent>initresult</parent>
+						<anchor>left</anchor>
+						<offset>-4</offset>
+					</right>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<script>
+					function update()
+						TokenManager.updateName(window.getDatabaseNode());
+					end
+					
+					function onClickDown(button, x, y)
+						if Input.isShiftPressed() then
+							return true;
+						end
+					end
+					
+					function onClickRelease(button, x, y)
+						if Input.isShiftPressed() then
+							local nodeActiveCT = CombatCommon.getActiveCT();
+							if nodeActiveCT then
+								TargetingManager.toggleTarget("host", nodeActiveCT.getNodeName(), window.getDatabaseNode().getNodeName());
+							end
+							return true;
+						end
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						if User.isHost() then
+							if dragging then
+								return true;
+							end
+							
+							draginfo.setType("combattrackerentry");
+							draginfo.setStringData(getValue());
+							draginfo.setCustomData(window.getDatabaseNode());
+							
+							dragging = true;
+							return true;
+						end
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onInit()
+						super.onInit();
+						setHoverCursor("hand");
+					end
+				</script>
+			</ctstringfield>
+
+
+			<!-- Targeting -->
+			<genericcontrol name="targetingicon">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>48</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>current</relation>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_targeting</icon>
+			</genericcontrol>
+
+			<windowlist name="targets">
+				<anchored>
+					<left>
+						<parent>targetingicon</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-60</offset>
+					</right>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>relative</relation>
+						<offset>8</offset>
+					</top>
+					<size>
+						<height>26</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>modifier</name>
+					<offset>8,8,56,8</offset>
+				</frame>
+				<datasource>.targets</datasource>
+				<class>combattracker_target</class>
+				<skipempty />
+				<noscroll />
+				<columns>
+					<width>26</width>
+					<fillwidth />
+				</columns>
+			</windowlist>
+
+			<buttoncontrol name="targeting_add_button">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-11</offset>
+					</right>
+					<top>
+						<parent>targets</parent>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_targeting</normal>
+					<pressed>button_targeting_down</pressed>
+				</icon>
+				<tooltip>
+					<text>Drag onto new host target</text>
+				</tooltip>
+				<script>
+					function onInit()
+						registerMenuItem("Targeting", "goto", 4);
+						registerMenuItem("Target all allies", "turn", 4, 3);
+						registerMenuItem("Target all non-allies", "mask", 4, 5);
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						draginfo.setType("targeting");
+						draginfo.setIcon("drag_targeting");
+						draginfo.setShortcutData(window.getClass(), window.getDatabaseNode().getNodeName());
+						
+						dragging = true;
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onMenuSelection(selection, subselection)
+						if selection == 4 then
+							if subselection == 3 then
+								TargetingManager.clearTargets("host", window.getDatabaseNode());
+								TargetingManager.addFactionTargetsHost(window.getDatabaseNode(), window.friendfoe.getStringValue());
+							elseif subselection == 5 then
+								TargetingManager.clearTargets("host", window.getDatabaseNode());
+								TargetingManager.addFactionTargetsHost(window.getDatabaseNode(), window.friendfoe.getStringValue(), true);
+							end
+						end
+					end
+				</script>
+			</buttoncontrol>
+
+			<buttoncontrol name="targeting_clear_button">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-34</offset>
+					</right>
+					<top>
+						<parent>targets</parent>
+						<anchor>top</anchor>
+						<offset>2</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_delete</normal>
+					<pressed>button_delete_down</pressed>
+				</icon>
+				<tooltip>
+					<text>Clear host targeting</text>
+				</tooltip>
+				<script>
+					function onButtonPress()
+						TargetingManager.clearTargets("host", window.getDatabaseNode());
+					end
+				</script>
+			</buttoncontrol>
+			
+					
+			<!-- Effects -->
+			<genericcontrol name="effecticon">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>48</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>current</relation>
+						<offset>6</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_effect_small</icon>
+			</genericcontrol>
+
+			<jpglist name="effects">
+				<anchored>
+					<left>
+						<parent>effecticon</parent>
+						<anchor>right</anchor>
+						<offset>8</offset>
+					</left>
+					<right>
+						<anchor>right</anchor>
+						<offset>-12</offset>
+					</right>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>relative</relation>
+						<offset>8</offset>
+					</top>
+				</anchored>
+				<datasource>.effects</datasource>
+				<class>combattracker_effect</class>
+				<menutext>Effect</menutext>
+				<frame>
+					<name>modifier</name>
+					<offset>8,8,8,8</offset>
+				</frame>
+				<script>
+					function checkForEmpty()
+						for k, v in ipairs(getWindows()) do
+							if v.label.getValue() == "" then
+								return;
+							end
+						end
+
+						NodeManager.createWindow(self);
+					end
+
+					function onDrop(x, y, draginfo)
+						if draginfo.isType("number") then
+							if string.match(draginfo.getDescription(), "%[SAVE%]") then
+								local wnd = getWindowAt(x,y);
+								if wnd then
+									local custom = draginfo.getCustomData();
+									if not custom then
+										custom = {};
+									end
+									custom["effect"] = wnd.getDatabaseNode();
+									draginfo.setCustomData(custom);
+								end
+							end
+						end
+					end
+				</script>
+			</jpglist>
+ 
+			<stringcontrol name="targets_label">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>48</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>current</relation>
+						<offset>6</offset>
+					</top>
+					<size>
+						<width>40</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Targets:</static>
+				<nodrag />
+				<nodragselect />
+				<invisible />
+			</stringcontrol>
+			<stringcontrol name="targets_str">
+				<anchored>
+					<left>
+						<parent>targets_label</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>relative</relation>
+						<offset>6</offset>
+					</top>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<multilinespacing>14</multilinespacing>
+				<invisible />
+				<static />
+				<nodrag />
+				<nodragselect />
+			</stringcontrol>
+ 
+			<spacercontrol name="spacer2">
+				<anchor>name</anchor>
+				<relative />
+				<height>6</height>
+			</spacercontrol>
+
+			<stringcontrol name="effects_label">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>48</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>current</relation>
+					</top>
+					<size>
+						<width>40</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Effects:</static>
+				<nodrag />
+				<nodragselect />
+				<invisible />
+			</stringcontrol>
+			<stringcontrol name="effects_str">
+				<anchored>
+					<left>
+						<parent>effects_label</parent>
+						<anchor>right</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>relative</relation>
+					</top>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<multilinespacing>14</multilinespacing>
+				<invisible />
+				<static />
+				<nodrag />
+				<nodragselect />
+			</stringcontrol>
+
+			<spacercontrol name="spacer">
+				<anchor>name</anchor>
+				<relative />
+				<height>9</height>
+			</spacercontrol>
+
+			<spacercontrol name="active_spacer_bottom">
+				<anchor>name</anchor>
+				<relative />
+				<height>5</height>
+				<invisible />
+			</spacercontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="combattracker_window">
+		<frame>ctbox</frame>
+		<placement>
+			<size>
+				<width>568</width>
+				<height>512</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>550</width>
+				<height>250</height>
+			</minimum>
+			<maximum>
+				<height>10000</height>
+			</maximum>
+			<dynamic>
+				<resize>both</resize>
+			</dynamic>
+		</sizelimits>
+		<nodelete />
+		<sheetdata>
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<text>Combat Tracker</text>
+				</title>
+			</windowtitlebar>
+
+			<!-- HEADER TOGGLES AND LABELS -->
+			<genericcontrol name="button_global_visibility_frame">
+				<bounds>22,28,40,35</bounds>
+				<frame>
+					<name>ctwindow_sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			
+			<checkbox name="button_global_visibility">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>33</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>37</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>19</height>
+					</size>
+				</anchored>
+				<parameters>
+					<icons>indicator_visibilityon</icons>
+					<defaulticon>indicator_visibilityoff</defaulticon>
+					<tooltips>Hide all NPCs</tooltips>
+					<defaulttooltip>Show all NPCs</defaulttooltip>
+				</parameters>
+				<sourceless />
+				<script>
+					function onValueChanged()
+						window.list.toggleVisibility();
+					end
+				</script>
+			</checkbox>
+
+			<stringcontrol>
+				<bounds>60,48,30,10</bounds>
+				<font>ct_header</font>
+				<static>Name</static>
+			</stringcontrol>
+			<stringcontrol name="label_init">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-272</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>48</offset>
+					</top>
+				</anchored>
+				<font>ct_header</font>
+				<static>Init</static>
+			</stringcontrol>
+			
+
+			<genericcontrol name="button_global_frame">
+				<bounds>-160,28,120,35</bounds>
+				<frame>
+					<name>ctwindow_sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			
+			<button_toggle name="button_global_targeting">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-130</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>35</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>21</height>
+					</size>
+				</anchored>
+				<icon>indicator_targeting</icon>
+				<script>
+					function onValueChanged()
+						window.list.toggleTargeting();
+					end
+				</script>
+			</button_toggle>
+			
+			<button_toggle name="button_global_effects">
+				<anchored>
+					<to>button_global_targeting</to>
+					<position>right</position>
+					<offset>0,0</offset>
+					<size>
+						<width>20</width>
+					</size>
+				</anchored>
+				<icon>indicator_effect_small</icon>
+				<script>
+					function onValueChanged()
+						window.list.toggleEffects();
+					end
+				</script>
+			</button_toggle>
+				
+			<!-- COMBATANT LIST -->
+			<windowlist name="list">
+				<datasource>.</datasource>
+				<class>combattracker_entry</class>
+				<skipempty />
+				<bounds>0,65,-20,-65</bounds>
+				<script file="scripts/combattracker.lua" />
+			</windowlist>
+			<scrollercontrol>
+				<anchored>
+					<to>list</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<!-- FOOTER CONTROLS -->
+			<genericcontrol name="icon_setactive">
+				<bounds>28,-53,33,40</bounds>
+				<activeicon>indicator_ctactive</activeicon>
+				<script>
+					function onInit()
+						widget = addBitmapWidget(activeicon[1]);
+						setHoverCursor("hand");
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						draginfo.setType("combattrackeractivation");
+						draginfo.setIcon(activeicon[1]);
+						widget.setVisible(false);
+						
+						dragging = true;
+						return true;
+					end
+					
+					function onDragEnd(draginfo)
+						widget.setVisible(true);
+						dragging = false;
+					end
+				</script>
+			</genericcontrol>
+			<buttoncontrol name="advance_actor">
+				<bounds>62,-45,33,26</bounds>
+				<icon>
+					<normal>button_ctnextactor</normal>
+					<pressed>button_ctnextactor_down</pressed>
+				</icon>
+				<tooltip>
+					<text>Next actor</text>
+				</tooltip>
+				<script>
+					function onButtonPress()
+						window.list.nextActor();
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						draginfo.setType("combattrackernextactor");
+						draginfo.setIcon(icon[1].normal[1]);
+						
+						dragging = true;
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+				</script>
+			</buttoncontrol>
+
+			<combattrackerffsource name="ffsource_friend">
+				<bounds>200,-43,20,20</bounds>
+				<icon>indicator_ctfffriend</icon>
+				<value>friend</value>
+				<tooltip>
+					<text>Friendly</text>
+				</tooltip>
+			</combattrackerffsource>
+			<combattrackerffsource name="ffsource_neutral">
+				<bounds>227,-43,20,20</bounds>
+				<icon>indicator_ctffneutral</icon>
+				<value>neutral</value>
+				<tooltip>
+					<text>Neutral</text>
+				</tooltip>
+			</combattrackerffsource>
+			<combattrackerffsource name="ffsource_foe">
+				<bounds>254,-43,20,20</bounds>
+				<icon>indicator_ctfffoe</icon>
+				<value>foe</value>
+				<tooltip>
+					<text>Hostile</text>
+				</tooltip>
+			</combattrackerffsource>
+			
+			<buttoncontrol name="button_menu">
+				<bounds>-210,-40,40,15</bounds>
+				<icon>
+					<normal>button_menu</normal>
+					<pressed>button_menu_down</pressed>
+				</icon>
+				<tooltip>
+					<text>Right click for CT menu</text>
+				</tooltip>
+				<script>
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						if button == 1 then
+							Interface.openRadialMenu();
+							return true;
+						end
+					end
+					
+					function onInit()
+						if User.isHost() then
+							registerMenuItem("Initiative", "turn", 7);
+							registerMenuItem("Clear All Initiatives", "pointer_circle", 7, 4);
+							
+							registerMenuItem("Delete NPCs from tracker", "delete", 3);
+							registerMenuItem("Confirm NPC Delete", "delete", 3, 1);
+
+							registerMenuItem("Effects", "hand", 5);
+							registerMenuItem("Clear All Effects", "pointer_circle", 5, 7);
+							registerMenuItem("Clear Expiring Effects", "pointer_cone", 5, 5);
+						end
+					end
+					
+					function onMenuSelection(selection, subselection, subsubselection)
+						if User.isHost() then
+							if selection == 7 then
+								if subselection == 4 then
+									window.list.resetInit();
+								end
+							end
+							
+							if selection == 5 then
+								if subselection == 7 then
+									window.list.resetEffects();
+								elseif subselection == 5 then
+									window.list.clearExpiringEffects();
+								end
+							end
+							if selection == 3 then
+								if subselection == 1 then
+									window.list.deleteNPCs();
+								end
+							end
+						end
+					end
+				</script>
+			</buttoncontrol>
+
+			<stringcontrol name="roundcounterlabel">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-108</offset>
+					</right>
+					<top>
+						<anchor>bottom</anchor>
+						<offset>-39</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<font>ct_label</font>
+				<static>Round</static>
+			</stringcontrol>
+			<jpgnumberfield name="roundcounter" source="..combattracker_props.round">
+				<anchored>
+					<left>
+						<parent>roundcounterlabel</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>roundcounterlabel</parent>
+						<anchor>top</anchor>
+						<offset>-6</offset>
+					</top>
+					<size>
+						<width>40</width>
+						<height>25</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>ctwindow_sheetgroup</name>
+					<offset>3,3,3,3</offset>
+				</frame>
+				<font>ct_labelnumber</font>
+				<gmonly />
+			</jpgnumberfield>
+			<buttoncontrol name="advance_round">
+				<anchored>
+					<to>roundcounter</to>
+					<position>righthigh</position>
+					<offset>5,0</offset>
+					<size>
+						<width>33</width>
+						<height>26</height>
+					</size>
+				</anchored>
+				<icon>
+					<normal>button_ctnextround</normal>
+					<pressed>button_ctnextround_down</pressed>
+				</icon>
+				<tooltip>
+					<text>Next round</text>
+				</tooltip>
+				<script>
+					function onButtonPress()
+						window.list.nextRound();
+					end
+					
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						draginfo.setType("combattrackernextround");
+						draginfo.setIcon(icon[1].normal[1]);
+						
+						dragging = true;
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+				</script>
+			</buttoncontrol>
+			
+			<closebutton_combattracker />
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="effectsmall">
+		<playercontrol />
+		<sizelimits>
+			<minimum>
+				<height>26</height>
+			</minimum>
+		</sizelimits>
+		<script>
+			function onInit()
+				if User.isHost() then
+					registerMenuItem("Delete Item", "delete", 6);
+					registerMenuItem("Confirm Delete", "delete", 6, 7);
+				else
+					isgmonly.setVisible(false);
+					apply.setAnchor("top", "", "", "absolute", 7);
+				end
+			end
+
+			function onMenuSelection(selection, subselection)
+				if selection == 6 and subselection == 7 then
+					getDatabaseNode().delete();
+				end
+			end
+
+			function onDrop(x, y, draginfo)
+				return windowlist.onDrop(x, y, draginfo);
+			end
+			
+			function getEffectStructure()
+				local rEffect = { 
+						sName = label.getValue(), 
+						sExpire = expiration.getStringValue(), 
+						nGMOnly = isgmonly.getIndex(),
+						sApply = apply.getStringValue(),
+						sSource = "",
+						nInit = CombatCommon.getActiveInit() or 0
+						};
+				return rEffect;
+			end
+			
+			function onDrag(button, x, y, draginfo)
+				return RulesManager.dragEffect(draginfo, nil, getEffectStructure());
+			end
+			
+			function onDoubleClick(x, y)
+				local rTargetActor = nil;
+				if User.isHost() then
+					rTargetActor = CombatCommon.getActor("ct", CombatCommon.getActiveCT());
+				else
+					local sID = User.getCurrentIdentity();
+					if sID then
+						rTargetActor = CombatCommon.getActor("pc", CombatCommon.getCTFromNode("charsheet." .. sID));
+					end
+				end
+				return RulesManager.dclkEffect(nil, getEffectStructure(), rTargetActor);
+			end
+
+			function onGainFocus()
+				window.setFrame("rowshade");
+			end
+
+			function onLoseFocus()
+				window.setFrame(nil);
+			end
+		</script>
+		<sheetdata>
+			<labelcycler name="expiration">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-30</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>4</offset>
+					</top>
+					<size>
+						<width>45</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>sheettextsmall</font>
+				<center />
+				<frame>
+					<name>bonus</name>
+					<offset>2,6,2,1</offset>
+				</frame>
+				<stateframe>
+					<hover>
+						<name>sheetfocus</name>
+						<offset>2,6,2,1</offset>
+					</hover>
+				</stateframe>
+				<parameters>
+					<labels>End N|Start|End</labels>
+					<values>endnext|start|end</values>
+				</parameters>
+				<gmonly />
+				<script>
+										
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+				</script>
+			</labelcycler>
+
+			<checkbox name="isgmonly">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>1</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<gmonly />
+				<parameters>
+					<icons>button_toggle_gm</icons>
+					<defaulticon>button_toggle_visible</defaulticon>
+					<tooltips>Visible to GM</tooltips>
+					<defaulttooltip>Visible to All</defaulttooltip>
+				</parameters>
+			</checkbox>
+			<iconcycler name="apply">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>2</offset>
+					</left>
+					<top>
+						<anchor>top</anchor>
+						<offset>12</offset>
+					</top>
+					<size>
+						<width>24</width>
+						<height>10</height>
+					</size>
+				</anchored>
+				<gmonly />
+				<parameters>
+					<icons>button_toggle_one|button_toggle_single</icons>
+					<values>once|single</values>
+					<tooltips>Apply once|Apply each once</tooltips>
+					<defaulticon>button_toggle_all</defaulticon>
+					<defaulttooltip>Apply all</defaulttooltip>
+				</parameters>
+			</iconcycler>
+			
+			<textlistitemvalue name="label">
+				<anchored>
+					<left>
+						<parent>apply</parent>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</left>
+					<right>
+						<parent>expiration</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>3</offset>
+					</top>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<gmonly />
+				<script>
+					function onDrag(button, x, y, draginfo)
+						if dragging then
+							return true;
+						end
+						
+						dragging = window.onDrag(button, x, y, draginfo);
+						return true;
+					end
+
+					function onDragEnd(draginfo)
+						dragging = false;
+					end
+
+					function onDoubleClick(x, y)
+						return window.onDoubleClick(x, y);
+					end
+				</script>
+			</textlistitemvalue>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="effectlist">
+		<frame>sctbox</frame>
+		<playercontrol />
+		<nodelete />
+		<tooltip>
+			<text>Effect list</text>
+		</tooltip>
+		<placement>
+			<size>
+				<width>275</width>
+				<height>350</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<dynamic />
+			<minimum>
+				<width>200</width>
+				<height>220</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<!-- TITLE -->
+			<windowtitlebar>
+				<title>
+					<text>Effects</text>
+				</title>
+			</windowtitlebar>
+			
+			<!-- LIST -->
+			<windowlist name="list">
+				<bounds>30,50,-30,-75</bounds>
+				<datasource>.</datasource>
+				<class>effectsmall</class>
+				<useallmodules />
+				<frame>
+					<name>sheetgroup</name>
+					<offset>9,10,9,6</offset>
+				</frame>
+				<script>
+					function onInit()
+						if User.isHost() then
+							registerMenuItem("Create Item", "insert", 5);
+						end
+					end
+					
+					function createItem()
+						local wnd = NodeManager.createWindow(self);
+						if wnd then
+							wnd.label.setFocus();
+						end
+						return wnd;
+					end
+					
+					function onMenuSelection(selection)
+						if selection == 5 then
+							createItem();
+						end
+					end
+					
+					function onClickDown(button, x, y)
+						return true;
+					end
+					
+					function onClickRelease(button, x, y)
+						if User.isHost() then
+							if not getNextWindow(nil) then
+								createItem();
+							end
+						end
+						return true;
+					end
+					
+					function onSortCompare(w1, w2)
+						return w1.label.getValue() &gt; w2.label.getValue();
+					end
+
+					function onFilter(w)
+						if not User.isHost() and w.isgmonly.getState() then
+							return false;
+						end
+
+						local f = string.lower(window.filter.getValue());
+						if f == "" then
+							return true;
+						end
+						
+						if string.find(string.lower(w.label.getValue()), f, 0, true) then
+							return true;
+						end
+						
+						return false;
+					end
+					
+					function onDrop(x, y, draginfo)
+						if User.isHost() then
+							local rEffect = RulesManager.decodeEffectFromDrag(draginfo);
+							if rEffect then
+								local wnd = NodeManager.createWindow(self);
+								if wnd then
+									wnd.label.setValue(rEffect.sName);
+									wnd.expiration.setStringValue(rEffect.sExpire);
+
+									wnd.isgmonly.setState(rEffect.nGMOnly);
+									wnd.apply.setStringValue(rEffect.sApply);
+								end
+							end
+							return true;
+						end
+					end
+				</script>
+			</windowlist>
+			<scrollercontrol name="scroller">
+				<anchored>
+					<to>list</to>
+					<position>belowright</position>
+					<offset>-2,14</offset>
+				</anchored>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+
+			<!-- LIST CONTROLS -->
+			<filter name="filter">
+				<bounds>65,-55,-80,20</bounds>
+				<target>list</target>
+				<trigger>filtertrigger</trigger>
+			</filter>
+			<filtertrigger name="filtertrigger">
+				<bounds>30,-65,21,41</bounds>
+				<target>filter</target>
+			</filtertrigger>			
+			
+			<closebutton_skillchallengetracker />
+		</sheetdata>
+	</windowclass>
+</root>

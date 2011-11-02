@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<template name="identitylist_entry">
+		<genericcontrol>
+			<anchored>
+				<left>
+					<parent>anchor</parent>
+					<anchor>right</anchor>
+					<relation>relative</relation>
+					<offset>3</offset>
+				</left>
+				<top>
+					<parent>anchor</parent>
+					<anchor>top</anchor>
+					<offset>2</offset>
+				</top>
+				<size>
+					<width>70</width>
+					<height>15</height>
+				</size>
+			</anchored>
+			<frame>
+				<name>mini_name</name>
+			</frame>
+			<script file="scripts/identitylist_entry.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="characterlist_entry">
+		<genericcontrol>
+			<anchored>
+				<left>
+					<parent>anchor</parent>
+					<anchor>right</anchor>
+					<relation>relative</relation>
+					<offset>3</offset>
+				</left>
+				<top>
+					<parent>anchor</parent>
+					<anchor>top</anchor>
+				</top>
+				<size>
+					<width>75</width>
+					<height>75</height>
+				</size>
+			</anchored>
+			<script file="scripts/characterlist_entry.lua" />
+		</genericcontrol>
+	</template>
+
+	<template name="desktop_stackitem">	
+		<windowreferencecontrol>
+			<bounds>0,0,47,27</bounds>
+			<nodrag />
+			<closetoggle />
+		</windowreferencecontrol>
+	</template>
+
+	<template name="desktop_dockitem">	
+		<windowreferencecontrol>
+			<bounds>0,0,100,95</bounds>
+			<nodrag />
+			<closetoggle />
+		</windowreferencecontrol>
+	</template>
+</root>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="chat">
+		<frame>chatbox</frame>
+		<sizelimits>
+			<minimum>
+				<width>350</width>
+				<height>350</height>
+			</minimum>
+			<maximum>
+				<height>10000</height>
+				<width>10000</width>
+			</maximum>
+			<dynamic>
+				<resize>both</resize>
+			</dynamic>
+		</sizelimits>
+		<placement>
+			<size>
+				<width>350</width>
+				<height>650</height>
+			</size>
+			<position>
+				<x>15</x>
+				<y>90</y>
+			</position>
+		</placement>
+		<softclose />
+		<sharable />
+		<script>
+			function onInit()
+				User.onLogin = reshare
+				Input.onAlt = reopen
+				self.onMove = onMove
+			end
+			function reshare()
+				share()
+			end
+			function reopen()
+				Interface.openWindow("chat","")
+				share()
+			end
+				function onMove()
+					self.setSize(self.getSize())
+			end
+		</script>
+		<sheetdata>
+			<chatwindow name="chat">
+				<bounds>20,15,-22,-60</bounds>
+				<droptypes>
+					<type>dice</type>
+					<type>number</type>
+					<type>string</type>
+					<type>effect</type>
+					<type>attack</type>
+					<type>damage</type>
+					<type>init</type>
+					<type>save</type>
+					<type>ability</type>
+					<type>skill</type>
+				</droptypes>
+				<stateframe>
+					<drophilight>
+						<name>chatboxhilight</name>
+						<offset>6,5,2,11</offset>
+					</drophilight>
+				</stateframe>
+				<modeframe>
+					<mode>story</mode>
+					<name>chatframe_story</name>
+					<offset>5,5,5,5</offset>
+				</modeframe>
+				<modeframe>
+					<mode>chat</mode>
+					<name>chatframe_chat</name>
+					<offset>15,5,5,5</offset>
+				</modeframe>
+				<script file="scripts/chat_chat.lua" />
+			</chatwindow>
+			<genericcontrol>
+				<anchored>
+					<to>chat</to>
+					<position>insidetopright</position>
+					<size>
+						<width>60</width>
+						<height>61</height>
+					</size>
+				</anchored>
+				<icon>indicator_chatwait</icon>
+				<invisible />
+				<script>
+					function onUserStateChange(username, statename, state)
+						if username == "" then
+							if statename == "typing" then
+								setVisible(true);
+							elseif statename == "active" or statename == "idle" then
+								setVisible(false);
+							end
+						end
+					end
+				
+					function onInit()
+						User.onUserStateChange = onUserStateChange;
+					end
+				</script>
+			</genericcontrol>
+			<chatentry name="entry">
+				<anchored>
+					<left>
+						<anchor>left</anchor>
+						<offset>16</offset>
+					</left>
+					<top>
+						<anchor>bottom</anchor>
+						<offset>-34</offset>
+					</top>
+					<right>
+						<anchor>right</anchor>
+						<offset>-64</offset>
+					</right>
+					<bottom>
+						<anchor>bottom</anchor>
+						<offset>-16</offset>
+					</bottom>
+				</anchored>
+				<chatwindow>chat</chatwindow>
+				<font>chatfont</font>
+				<script file="scripts/chat_entry.lua" />
+			</chatentry>
+			<genericcontrol name="mode">
+				<anchored>
+					<left>
+						<anchor>right</anchor>
+						<offset>-55</offset>
+					</left>
+					<top>
+						<anchor>bottom</anchor>
+						<offset>-40</offset>
+					</top>
+					<size>
+						<width>43</width>
+						<height>24</height>
+					</size>
+				</anchored>
+				<icon>chat_speak</icon>
+				<script file="scripts/chat_mode.lua" />
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="identitylist">
+		<sizelimits>
+			<minimum>
+				<height>20</height>
+			</minimum>
+		</sizelimits>
+		<sheetdata>
+			<genericcontrol name="anchor">
+				<bounds>0,0,1,1</bounds>
+			</genericcontrol>
+		</sheetdata>
+		<script file="scripts/identitylist.lua" />
+	</windowclass>
+
+	<windowclass name="characterlist">
+		<script file="scripts/characterlist.lua" />
+		<sheetdata>
+			<genericcontrol name="anchor">
+				<bounds>5,5,1,1</bounds>
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+	
+	<windowclass name="shortcuts">
+		<sizelimits>
+			<maximum>
+				<height>10000</height>
+			</maximum>
+		</sizelimits>
+		<script>
+			function onInit()
+				DesktopManager.registerContainerWindow(self);
+			end
+		</script>
+		<sheetdata>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="modifierstack">
+		<script>
+			function onInit()
+				ModifierStack.registerControl(self);
+			end
+			
+			function onClose()
+				ModifierStack.registerControl(nil);
+			end
+		</script>
+		<sheetdata>
+			<genericcontrol name="base">
+				<bounds>0,5,64,52</bounds>
+				<icon>modcollector</icon>
+				<counters>
+					<icon>modcollector_counter</icon>
+					<offset>
+						<x>9</x>
+						<y>47</y>
+					</offset>
+					<spacing>9</spacing>
+					<hoversize>4</hoversize>
+				</counters>
+				<script file="scripts/modifierstack_base.lua" />
+			</genericcontrol>
+			<numbercontrol name="modifier">
+				<bounds>3,2,54,42</bounds>
+				<font>modcollector</font>
+				<displaysign />
+				<keyeditframe>
+					<name>modstackfocus</name>
+					<offset>-1,-11,-1,-8</offset>
+				</keyeditframe>
+				<droptypes>
+					<type>number</type>
+					<type>dice</type>
+					<type>effect</type>
+				</droptypes>
+				<stateframe>
+					<drophilight>
+						<name>modstackfocus</name>
+						<offset>0,-11,0,3</offset>
+					</drophilight>
+				</stateframe>
+				<script file="scripts/modifierstack_modifier.lua" />
+			</numbercontrol>
+			<stringcontrol name="label">
+				<bounds>5,34,54,12</bounds>
+				<font>modcollectorlabel</font>
+				<static>Modifier</static>
+				<center />
+				<script>
+					function onDrop(x, y, draginfo)
+						return window.base.onDrop(x, y, draginfo);
+					end
+				</script>
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+</root>
+

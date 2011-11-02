@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="clienttracker_entry">
+		<frame>ctentrybox</frame>
+		<sizelimits>
+			<minimum>
+				<height>32</height>
+			</minimum>
+		</sizelimits>
+		<script file="scripts/clienttracker_entry.lua" />
+		<sheetdata>
+			<!-- Hidden fields -->
+			<stringfield name="type">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+				<script>
+					function onValueChanged()
+						window.onTypeChanged();
+					end
+				</script>
+			</stringfield>
+			<stringfield name="tokenrefid">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+			</stringfield>
+			<stringfield name="tokenrefnode">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+				<script>
+					function onValueChanged()
+						window.linkToken();
+					end
+				</script>
+			</stringfield>
+			<windowreferencefield name="link">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+			</windowreferencefield>
+			<numberfield name="init">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+			</numberfield>
+			<numberfield name="show_npc">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+			</numberfield>
+
+			<spacercontrol name="active_spacer_top">
+				<height>5</height>
+				<invisible />
+			</spacercontrol>
+			
+			<!-- ACTIVE INDICATOR -->
+			<numberfield name="active">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+				<script>
+					function onValueChanged()
+						window.onActiveChanged();
+					end
+				</script>
+			</numberfield>
+			<genericcontrol name="passive_icon">
+				<anchored>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<size>
+						<width>33</width>
+						<height>40</height>
+					</size>
+				</anchored>
+				<icon>indicator_ctpassive</icon>
+			</genericcontrol>
+			<genericcontrol name="active_icon">
+				<anchored>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<left>
+						<anchor>left</anchor>
+					</left>
+					<size>
+						<width>33</width>
+						<height>40</height>
+					</size>
+				</anchored>
+				<icon>indicator_ctactive</icon>
+				<invisible />
+			</genericcontrol>
+
+			<!-- Basics -->
+			<tokenfield name="token">
+				<anchored>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>7</offset>
+					</top>
+					<left>
+						<anchor>left</anchor>
+						<offset>33</offset>
+					</left>
+					<size>
+						<height>25</height>
+						<width>25</width>
+					</size>
+				</anchored>
+				<empty>indicator_emptytoken</empty>
+			</tokenfield>
+			
+			<genericcontrol name="hspacer1">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>10</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+			
+			<stringfield name="friendfoe">
+				<invisible />
+				<bounds>0,0,1,1</bounds>
+				<script>
+					function onValueChanged()
+						window.onFactionChanged();
+					end
+				</script>
+			</stringfield>
+			<genericcontrol name="friendfoe_icon">
+				<anchored>
+					<right>
+						<parent>hspacer1</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>8</offset>
+					</top>
+					<size>
+						<width>20</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<script>
+					function updateIcon(value)
+						if value == "friend" then
+							setIcon("indicator_ctfffriend");
+							setTooltipText("Friendly");
+						elseif value == "neutral" then
+							setIcon("indicator_ctffneutral");
+							setTooltipText("Neutral");
+						elseif value == "foe" then
+							setIcon("indicator_ctfffoe");
+							setTooltipText("Hostile");
+						else
+							setIcon("indicator_ctffempty");
+							setTooltipText("");
+						end
+					end
+				</script>
+			</genericcontrol>
+
+			<genericcontrol name="hspacer2">
+				<anchored>
+					<right>
+						<parent>friendfoe_icon</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>8</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+
+			<genericcontrol name="hspacer3">
+				<anchored>
+					<right>
+						<parent>hspacer2</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<height>30</height>
+						<width>135</width>
+					</size>
+				</anchored>
+			</genericcontrol>
+
+			
+			<jpgnumberfield name="initresult">
+				<anchored>
+					<right>
+						<parent>hspacer3</parent>
+						<anchor>left</anchor>
+					</right>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>7</offset>
+					</top>
+					<size>
+						<width>34</width>
+						<height>23</height>
+					</size>
+				</anchored>
+				<hideonvalue>0</hideonvalue>
+				<font>sheetnumbersmall</font>
+				<frame>
+					<name>modifier</name>
+					<offset>2,2,2,2</offset>
+				</frame>
+				<readonly />
+				<script>
+					function onValueChanged()
+						window.windowlist.applySort();
+					end
+				</script>
+			</jpgnumberfield>
+
+			<stringfield name="name">
+				<anchored>
+					<top>
+						<parent>active_spacer_top</parent>
+						<anchor>bottom</anchor>
+						<offset>12</offset>
+					</top>
+					<left>
+						<parent>token</parent>
+						<anchor>right</anchor>
+						<offset>2</offset>
+					</left>
+					<right>
+						<parent>initresult</parent>
+						<anchor>left</anchor>
+						<offset>-4</offset>
+					</right>
+					<size>
+						<height>20</height>
+					</size>
+				</anchored>
+				<font>ct_name</font>
+				<frame>
+					<name>textlinesmall</name>
+					<offset>0,0,0,0</offset>
+				</frame>
+				<static />
+			</stringfield>
+			
+			<stringcontrol name="effects_label">
+				<anchored>
+					<left>
+						<parent>name</parent>
+						<anchor>left</anchor>
+						<offset>5</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+					</top>
+					<size>
+						<width>40</width>
+						<height>14</height>
+					</size>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<static>Effects:</static>
+				<invisible />
+				<nodrag />
+				<nodragselect />
+			</stringcontrol>
+			<stringcontrol name="effects_str">
+				<anchored>
+					<left>
+						<parent>name</parent>
+						<anchor>left</anchor>
+						<offset>50</offset>
+					</left>
+					<top>
+						<parent>name</parent>
+						<anchor>bottom</anchor>
+						<relation>relative</relation>
+					</top>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+				</anchored>
+				<font>sheetlabelsmall</font>
+				<multilinespacing>14</multilinespacing>
+				<invisible />
+				<static />
+				<nodrag />
+				<nodragselect />
+			</stringcontrol>
+
+			<spacercontrol name="spacer">
+				<anchor>name</anchor>
+				<relative />
+				<height>7</height>
+			</spacercontrol>
+			
+			<spacercontrol name="active_spacer_bottom">
+				<anchor>name</anchor>
+				<relative />
+				<height>5</height>
+				<invisible />
+			</spacercontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="clienttracker_window">
+		<frame>ctbox</frame>
+		<placement>
+			<size>
+				<width>568</width>
+				<height>512</height>
+			</size>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>350</width>
+				<height>210</height>
+			</minimum>
+			<maximum>
+				<height>10000</height>
+			</maximum>
+			<dynamic>
+				<resize>both</resize>
+			</dynamic>
+		</sizelimits>
+		<nodelete />
+		<script>
+			function onInit()
+				
+			end
+		</script>
+		<sheetdata>
+			<!-- WINDOW TITLE -->
+			<windowtitlebar>
+				<title>
+					<text>Combat Tracker</text>
+				</title>
+			</windowtitlebar>
+
+			<!-- HEADER LABELS -->
+			<stringcontrol name="label_name">
+				<bounds>60,48,30,10</bounds>
+				<font>ct_header</font>
+				<static>Name</static>
+			</stringcontrol>
+			<stringcontrol name="label_init">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-207</offset>
+					</right>
+					<top>
+						<anchor>top</anchor>
+						<offset>48</offset>
+					</top>
+				</anchored>
+				<font>ct_header</font>
+				<static>Init</static>
+			</stringcontrol>
+			
+				
+			<windowlist name="list">
+				<datasource>.</datasource>
+				<class>clienttracker_entry</class>
+				<skipempty />
+				<bounds>0,65,-20,-65</bounds>
+				<script file="scripts/clienttracker.lua" />
+			</windowlist>
+
+			<scrollercontrol>
+				<anchored>
+					<to>list</to>
+					<position>insidebottomright</position>
+					<size>
+						<width>45</width>
+						<height>27</height>
+					</size>
+				</anchored>
+				<target>list</target>
+				<button>
+					<normal>button_scroller</normal>
+					<pressed>button_scroller_down</pressed>
+				</button>
+			</scrollercontrol>
+			
+			<buttoncontrol name="turn_complete">
+				<bounds>62,-45,33,26</bounds>
+				<icon>
+					<normal>button_ctnextactor</normal>
+					<pressed>button_ctnextactor_down</pressed>
+				</icon>
+				<tooltip>
+					<text>Turn complete</text>
+				</tooltip>
+				<script>
+					function onButtonPress()
+						ChatManager.sendSpecialMessage(ChatManager.SPECIAL_MSGTYPE_ENDTURN, {});
+					end
+				</script>
+			</buttoncontrol>
+
+			<stringcontrol name="roundcounterlabel">
+				<anchored>
+					<right>
+						<anchor>right</anchor>
+						<offset>-108</offset>
+					</right>
+					<top>
+						<anchor>bottom</anchor>
+						<offset>-39</offset>
+					</top>
+					<size>
+						<width>50</width>
+						<height>15</height>
+					</size>
+				</anchored>
+				<font>ct_label</font>
+				<static>Round</static>
+			</stringcontrol>
+			<jpgnumberfield name="roundcounter" source="..combattracker_props.round">
+				<anchored>
+					<left>
+						<parent>roundcounterlabel</parent>
+						<anchor>right</anchor>
+					</left>
+					<top>
+						<parent>roundcounterlabel</parent>
+						<anchor>top</anchor>
+						<offset>-6</offset>
+					</top>
+					<size>
+						<width>40</width>
+						<height>25</height>
+					</size>
+				</anchored>
+				<frame>
+					<name>ctwindow_sheetgroup</name>
+					<offset>3,3,3,3</offset>
+				</frame>
+				<font>ct_labelnumber</font>
+				<gmonly />
+			</jpgnumberfield>
+			
+			<closebutton_combattracker />
+		</sheetdata>
+	</windowclass>
+</root>

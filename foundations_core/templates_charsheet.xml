@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<template name="linkednumber">
+		<jpgnumberfield>
+			<source mergerule="resetandadd" />
+			<script file="scripts/template_linkednumber.lua" />
+		</jpgnumberfield>
+	</template>
+	
+	<template name="modifiernumber">
+		<linkednumber>
+			<nokeyedit />
+			<script file="scripts/template_modifiernumber.lua" />
+		</linkednumber>
+	</template>
+	
+	<template name="sheetbonus">
+		<modifiernumber>
+			<frame>
+				<name>sheetbonus</name>
+				<offset>5,5,5,5</offset>
+			</frame>
+			<font>sheetnumber</font>
+			<readonly />
+			<displaysign />
+			<modifiersize>mini</modifiersize>
+		</modifiernumber>
+	</template>
+
+	<template name="sheetnumber">
+		<basicnumberfield>
+			<source mergerule="resetandadd" />
+			<script file="scripts/template_linkednumber.lua" />
+		</basicnumberfield>
+	</template>
+
+	<template name="sheetmodifier">
+		<sheetnumber>
+			<displaysign />
+		</sheetnumber>
+	</template>
+
+	<template name="sheetreadonlymodifier">
+		<linkednumber>
+			<frame>
+				<name>modifier</name>
+				<offset>5,5,5,5</offset>
+			</frame>
+			<font>sheetnumber</font>
+			<readonly />
+			<displaysign />
+		</linkednumber>
+	</template>
+
+</root>

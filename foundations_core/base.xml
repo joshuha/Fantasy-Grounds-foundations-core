@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.8" release="1" logo="logo.png">
+	<description>
+		<text>Foundations Core</text>
+		<author>Joshuha Owen</author>
+		<website>http://www.fantasygrounds.com</website>
+	</description>
+
+	<importinfo>
+		<acceptfrom ruleset="" />
+	</importinfo>
+
+	<desktopframe>desktop</desktopframe>
+	<tokenroot source="tokens" />
+
+	<includefile source="graphics.xml" />
+	<includefile source="gameelements.xml" />
+	
+	<includefile source="templates_common.xml" />
+	<includefile source="desktop.xml" />
+
+	<includefile source="charsheet.xml" />
+	<includefile source="adventure.xml" />
+	<includefile source="utility.xml" />
+	<includefile source="reference.xml" />
+	
+	<script name="ChatManager" file="scripts/chatmanager.lua" />
+	<script name="OOBManager" file="scripts/manager_oob.lua" />
+
+	<script name="GmIdentityManager" file="scripts/gmidentitymanager.lua" />
+	<script name="ExportManager" file="scripts/exportmanager.lua" />
+	<script name="WindowManager" file="scripts/manager_windows.lua" />
+	<script name="DesktopManager" file="scripts/manager_desktop.lua" />
+	<script name="NodeManager" file="scripts/manager_node.lua" />
+	<script name="StringManager" file="scripts/manager_string.lua" />
+	<script name="DiceTowerManager" file="scripts/manager_dicetower.lua" />
+	<script name="OptionsManager" file="scripts/manager_options.lua" />
+
+	<script name="ActorManager" file="scripts/manager_actor.lua" />
+	<script name="EffectsManager" file="scripts/manager_effect.lua" />
+	<script name="RulesManager" file="scripts/manager_rules.lua" />
+	<script name="RollsManager" file="scripts/manager_rolls.lua" />
+	<script name="TargetingManager" file="scripts/manager_targeting.lua" />
+	<script name="TokenManager" file="scripts/manager_token.lua" />
+	
+	<script name="CharSheetCommon" file="scripts/charsheet_common.lua" />
+	<script name="NPCCommon" file="scripts/npc_common.lua" />
+	<script name="CombatCommon" file="scripts/combattracker_common.lua" />
+	<script name="DataCommon" file="scripts/data_common.lua" />
+	<script name="ModifierStack" file="scripts/modifierstack.lua" />
+
+	<script name="Desktop" file="scripts/desktop.lua" />
+</root>

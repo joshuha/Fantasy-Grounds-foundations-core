@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<windowclass name="charsheet">
+		<frame>charsheet</frame>
+		<placement>
+			<size>
+				<width>525</width>
+				<height>613</height>
+			</size>
+			<position>
+				<x>410</x>
+				<y>90</y>
+			</position>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>525</width>
+				<height>613</height>
+			</minimum>
+			<maximum>
+				<width>525</width>
+				<height>613</height>
+			</maximum>
+		</sizelimits>
+		<minimize />
+		<nodelete />
+		<playercontrol />
+		<script file="scripts/charsheet_toplevel.lua" />
+		<sheetdata>
+			<windowreferencecontrol>
+				<bounds>10,-25,40,15</bounds>
+				<icon>
+					<normal>button_minisheet</normal>
+					<pressed>button_minisheet_down</pressed>
+				</icon>
+				<class>charsheetmini_top</class>
+				<tooltip>
+					<text>Mini sheet</text>
+				</tooltip>
+				<script>
+					function onClickRelease(button, x, y)
+						local wnd = Interface.findWindow("charsheetmini_top", window.getDatabaseNode());
+						if wnd then
+							wnd.close();
+						else
+							wnd = Interface.openWindow("charsheetmini_top", window.getDatabaseNode());
+
+							local tabindex = window.tabs.getIndex();
+							if tabindex == 1 or tabindex == 2 or tabindex == 7 then
+								wnd.tabs.activateTab(1);
+							elseif tabindex == 3 or tabindex == 4 then
+								wnd.tabs.activateTab(2);
+							elseif tabindex == 5 then
+								wnd.tabs.activateTab(3);
+							elseif tabindex == 6 then
+								wnd.tabs.activateTab(4);
+							end
+						end
+						return true;
+					end
+				</script>
+			</windowreferencecontrol>
+
+			<subwindow name="main">
+				<bounds>0,0,-1,-22</bounds>
+				<class>charsheet_main</class>
+			</subwindow>
+			
+			<tabcontrol name="tabs">
+				<bounds>-22,50,18,87</bounds>
+				<tab>
+					<icon>tab_main</icon>
+					<subwindow>main</subwindow>
+				</tab>
+				<activate>1</activate>
+			</tabcontrol>
+		
+			<closebutton_charsheet />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheetmini_top">
+		<frame>charsheet</frame>
+		<placement>
+			<size>
+				<width>450</width>
+				<height>480</height>
+			</size>
+			<position>
+				<x>410</x>
+				<y>90</y>
+			</position>
+		</placement>
+		<sizelimits>
+			<minimum>
+				<width>450</width>
+				<height>480</height>
+			</minimum>
+			<dynamic>
+				<resize>both</resize>
+			</dynamic>
+		</sizelimits>
+		<minimize />
+		<nodelete />
+		<playercontrol />
+		<script file="scripts/charsheet_toplevel.lua" />
+		<sheetdata>
+			<genericcontrol name="mini_top_frame">
+				<bounds>10,20,-22,40</bounds>
+				<frame>
+					<name>sheetgroup</name>
+				</frame>
+			</genericcontrol>
+			<stringfield name="name">
+				<font>sheettext</font>
+				<frame>
+					<name>textline</name>
+				</frame>
+				<anchored>
+					<to>mini_top_frame</to>
+					<position>insidetopleft</position>
+					<offset>15,10</offset>
+					<size>
+						<width>120</width>
+						<height>20</height>
+					</size>
+				</anchored>
+				<static />
+			</stringfield>
+			
+			<!-- ACTIVATE IDENTITY -->
+			<buttoncontrol>
+				<bounds>-35,30,23,22</bounds>
+				<icon>
+					<normal>button_identityactivate</normal>
+					<pressed>button_identityactivate_down</pressed>
+				</icon>
+				<script>
+					function onInit()
+						if User.isLocal() then
+							setVisible(false);
+						end
+					end
+					
+					function onButtonPress()
+						if User.isLocal() then
+							return;
+						end
+						
+						if User.isHost() then
+							GmIdentityManager.addIdentity(window.name.getValue());
+						else
+							local identityname = window.getDatabaseNode().getName();
+
+							User.setCurrentIdentity(identityname);
+
+							if CampaignRegistry and CampaignRegistry.colortables and CampaignRegistry.colortables[identityname] then
+								local colortable = CampaignRegistry.colortables[identityname];
+								User.setCurrentIdentityColors(colortable.color or "000000", colortable.blacktext or false);
+							end
+						end
+					end
+				</script>
+			</buttoncontrol>
+		
+
+			<subwindow name="main">
+				<bounds>10,50,-22,-1</bounds>
+				<class>charsheetmini_basic</class>
+			</subwindow>
+			
+			
+			<windowreferencecontrol>
+				<bounds>10,-25,40,15</bounds>
+				<icon>
+					<normal>button_fullsheet</normal>
+					<pressed>button_fullsheet_down</pressed>
+				</icon>
+				<class>charsheet</class>
+				<tooltip>
+					<text>Full Sheet</text>
+				</tooltip>
+				<script>
+					function onClickRelease(button, x, y)
+						local wnd = Interface.findWindow("charsheet", window.getDatabaseNode());
+						if wnd then
+							wnd.close();
+						else
+							wnd = Interface.openWindow("charsheet", window.getDatabaseNode());
+
+							local tabindex = window.tabs.getIndex();
+							if tabindex == 1 then
+								wnd.tabs.activateTab(1);
+							elseif tabindex == 2 then
+								wnd.tabs.activateTab(4);
+							elseif tabindex == 3 then
+								wnd.tabs.activateTab(5);
+							elseif tabindex == 4 then
+								wnd.tabs.activateTab(6);
+							end
+						end
+						return true;
+					end
+				</script>
+			</windowreferencecontrol>
+
+			<tabcontrol name="tabs">
+				<bounds>-22,50,18,291</bounds>
+				<tab>
+					<icon>tab_main</icon>
+					<subwindow>main</subwindow>
+				</tab>
+				<activate>1</activate>
+			</tabcontrol>
+			
+			<closebutton_charsheetmini />
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  -- Please see the readme.txt file included with this distribution for 
+  -- attribution and copyright information.
+  -->
+
+<root version="2.6">
+	<!-- ICONS -->
+	<!-- Assume 24x24 for toolbar_30 icons, and 16x16 for toolbar_20 button icons -->
+    <icon name="tool_toggle_30" file="graphics/toolbar/tool_toggle_30.png" />
+
+    <icon name="tool_paint_30" file="graphics/toolbar/tool_paint_30.png" />
+    <icon name="tool_erase_30" file="graphics/toolbar/tool_erase_30.png" />
+    <icon name="tool_mask_30" file="graphics/toolbar/tool_mask_30.png" />
+    <icon name="tool_grid_30" file="graphics/toolbar/tool_grid_30.png" />
+
+    <icon name="tool_left_30" file="graphics/toolbar/tool_arrow_left_30.png" />
+    <icon name="tool_right_30" file="graphics/toolbar/tool_arrow_right_30.png" />
+    <icon name="tool_up_30" file="graphics/toolbar/tool_arrow_up_30.png" />
+    <icon name="tool_down_30" file="graphics/toolbar/tool_arrow_down_30.png" />
+    <icon name="tool_plus_30" file="graphics/toolbar/tool_plus_30.png" />
+    <icon name="tool_minus_30" file="graphics/toolbar/tool_minus_30.png" />
+    
+    <icon name="tool_target_clear_30" file="graphics/toolbar/tool_target_clear_30.png" />
+    <icon name="tool_target_enemies_30" file="graphics/toolbar/tool_target_enemies_30.png" />
+    <icon name="tool_target_allies_30" file="graphics/toolbar/tool_target_allies_30.png" />
+    
+	<!-- FRAMES -->
+	<framedef name="toolbar_20">
+		<bitmap file="graphics/toolbar/toolbar_20.png"/>
+		<topleft rect="0,0,2,2" />
+		<top rect="2,0,21,2" />
+		<topright rect="41,0,2,2" />
+		<left rect="0,2,2,18" />
+		<middle rect="2,2,21,18" />
+		<right rect="41,2,2,18" />
+		<bottomleft rect="0,20,2,2" />
+		<bottom rect="2,20,21,2" />
+		<bottomright rect="41,20,2,2" />
+	</framedef>
+
+	<framedef name="toolbar_30">
+		<bitmap file="graphics/toolbar/toolbar_30.png"/>
+		<topleft rect="0,0,4,3" />
+		<top rect="4,0,32,3" />
+		<topright rect="62,0,4,3" />
+		<left rect="0,3,4,28" />
+		<middle rect="4,3,32,28" />
+		<right rect="62,3,4,28" />
+		<bottomleft rect="0,31,4,3" />
+		<bottom rect="4,31,32,3" />
+		<bottomright rect="62,31,4,3" />
+	</framedef>
+
+    <!-- TEMPLATES -->
+    <template name="toolbar_button">
+		<genericcontrol>
+			<anchored>
+				<left>
+					<anchor>left</anchor>
+				</left>
+				<top>
+					<anchor>top</anchor>
+				</top>
+			</anchored>
+			<invisible/>
+			<script file="scripts/template_toolbar_button.lua" />
+		</genericcontrol>
+    </template>
+
+	<template name="toolbar_30">
+		<genericcontrol>
+			<anchored mergerule="replace">
+				<left>
+					<anchor>left</anchor>
+					<offset>0</offset>
+				</left>
+				<top>
+					<anchor>top</anchor>
+					<offset>0</offset>
+				</top>
+				<size>
+					<width>34</width>
+					<height>34</height>
+				</size>
+			</anchored>
+			<parameters>
+				<horzmargin>2</horzmargin>
+				<vertmargin>2</vertmargin>
+				<buttonsize>30</buttonsize>
+			</parameters>
+			<frame>
+				<name>toolbar_30</name>
+				<offset>0,0,0,0</offset>
+			</frame>
+			<button mergerule="resetandadd" />
+			<script file="scripts/template_toolbar.lua" />
+		</genericcontrol>
+	</template>
+	
+	<template name="toolbar_20">
+		<genericcontrol>
+			<anchored mergerule="replace">
+				<left>
+					<anchor>left</anchor>
+					<offset>0</offset>
+				</left>
+				<top>
+					<anchor>top</anchor>
+					<offset>0</offset>
+				</top>
+				<size>
+					<width>22</width>
+					<height>22</height>
+				</size>
+			</anchored>
+			<parameters>
+				<horzmargin>1</horzmargin>
+				<vertmargin>1</vertmargin>
+				<buttonsize>20</buttonsize>
+			</parameters>
+			<frame>
+				<name>toolbar_20</name>
+				<offset>0,0,0,0</offset>
+			</frame>
+			<button mergerule="resetandadd" />
+			<script file="scripts/template_toolbar.lua" />
+		</genericcontrol>
+	</template>
+</root>
