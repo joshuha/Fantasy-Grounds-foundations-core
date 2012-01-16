@@ -48,6 +48,7 @@
 	<script name="RollsManager" file="scripts/manager_rolls.lua" />
 	<script name="TargetingManager" file="scripts/manager_targeting.lua" />
 	<script name="TokenManager" file="scripts/manager_token.lua" />
+	<script name="CharacterSheetManager" file="scripts/manager_charactersheet.lua" />
 	
 	<script name="CharSheetCommon" file="scripts/charsheet_common.lua" />
 	<script name="NPCCommon" file="scripts/npc_common.lua" />

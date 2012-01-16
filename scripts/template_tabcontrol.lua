@@ -3,77 +3,83 @@
 -- attribution and copyright information.
 --
 
+local TAB_SIZE = 67
 local topWidget = nil;
 local tabIndex = 1;
-local tabWidgets = {};
-
-function getIndex()
-	return tabIndex;
-end
+local tabs = {};
 
 function activateTab(index)
-	-- Hide active tab, fade text labels
-	tabWidgets[tabIndex].setColor("80ffffff");
-	window[tab[tabIndex].subwindow[1]].setVisible(false);
-	if tab[tabIndex].scroller then
-		window[tab[tabIndex].scroller[1]].setVisible(false);
-	end
+	index = tonumber(index);
+	if index > 0 and index < #tabs+1 then
+		-- Hide active tab, fade text labels
+		tabs[tabIndex].widget.setColor("80ffffff");
+		window[tabs[tabIndex].subwindow].setVisible(false);
+		if tabs[tabIndex].scroller then
+			window[tabs[tabIndex].scroller].setVisible(false);
+		end 
 
-	-- Set new index
-	tabIndex = tonumber(index);
+		-- Set new index
+		tabIndex = index;
 
-	-- Move helper graphic into position
-	topWidget.setPosition("topleft", 5, 67*(tabIndex-1)+7);
-	if tabIndex == 1 then
-		topWidget.setVisible(false);
-	else
-		topWidget.setVisible(true);
-	end
-	
-	-- Activate text label and subwindow
-	tabWidgets[tabIndex].setColor("ffffffff");
+		-- Move helper graphic into position
+		topWidget.setPosition("topleft", 5, TAB_SIZE*(tabIndex-1)+7);
+		if tabIndex == 1 then
+			topWidget.setVisible(false);
+		else
+			topWidget.setVisible(true);
+		end
+		
+		-- Activate text label and subwindow
+		tabs[tabIndex].widget.setColor("ffffffff");
 
-	window[tab[tabIndex].subwindow[1]].setVisible(true);
-	if tab[tabIndex].scroller then
-		window[tab[tabIndex].scroller[1]].setVisible(true);
+		window[tabs[tabIndex].subwindow].setVisible(true);
+		for _,tab in pairs(tabs) do
+			tab.widget.bringToFront();
+		end
+		if tabs[tabIndex].scroller then
+			window[tabs[tabIndex].scroller].setVisible(true);
+		end
 	end
 end
 
 function onClickDown(button, x, y)
-	return true;
-end
-
-function onClickRelease(button, x, y)
-	local i = math.ceil(y/67);
+	local i = math.ceil(y/TAB_SIZE);
 	
-	-- Make sure index is in range and activate selected
-	if i > 0 and i < #tab+1 then
-		activateTab(i);
-	end
-	
-	return true;
+	activateTab(i);
 end
 
 function onDoubleClick(x, y)
-	-- Emulate click
-	onClickRelease(1, x, y);
+	-- Emulate single click
+	onClickDown(1, x, y);
+end
+
+function registerTab(name, icon, scroller)
+	local widget = addBitmapWidget(icon);
+	widget.setPosition("topleft", 7, TAB_SIZE*(#tabs)+41);
+	widget.setColor("80ffffff");
+	widget.bringToFront();
+	tabs[#tabs+1] = {widget = widget, subwindow = name, scroller = scroller};
+	
+	setAnchoredHeight(22 + #tabs * TAB_SIZE);
+	
+	if #tabs == 1 then 
+		activateTab(1);
+	end
 end
 
 function onInit()
 	-- Create a helper graphic widget to indicate that the selected tab is on top
-	topWidget = addBitmapWidget("tabtop");
+	topWidget = addBitmapWidget(tabtopicon[1]);
 	topWidget.setVisible(false);
 
-	-- Deactivate all labels	
-	for n, v in ipairs(tab) do
-		tabWidgets[n] = addBitmapWidget(v.icon[1]);
-		tabWidgets[n].setPosition("topleft", 7, 67*(n-1)+41);
-		tabWidgets[n].setColor("80ffffff");
+	-- as we're have a merge rule set for tabs, an "empty" implementation will still have tab set to {1 = TRUE}
+	if #tab > 1 or tab[1] ~= true then
+		for _,t in ipairs(tab) do
+			registerTab(t.subwindow[1], t.icon[1], t.scroller and t.scroller[1] or nil);
+		end
 	end
-
+	
 	if activate then
 		activateTab(activate[1]);
-	else
-		activateTab(1);
 	end
 end

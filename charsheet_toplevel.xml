@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 
 <!-- 
-  -- Please see the readme.txt file included with this distribution for 
-  -- attribution and copyright information.
+    Please see the readme.txt file included with this distribution for 
+    attribution and copyright information.
   -->
 
 <root version="2.6">
+	<template name="charsheet_sheet">
+		<subwindow>
+			<bounds>0,0,-28,-22</bounds>
+		</subwindow>
+	</template>
+
+	<template name="main_charsheet">
+		<charsheet_sheet>
+			<class>charsheet_main</class>
+		</charsheet_sheet>
+	</template>
+
 	<windowclass name="charsheet">
 		<frame>charsheet</frame>
 		<placement>
@@ -33,6 +45,26 @@
 		<playercontrol />
 		<script file="scripts/charsheet_toplevel.lua" />
 		<sheetdata>
+			<tabcontrol name="tabs">
+				<anchored>
+					<top>
+						<anchor>top</anchor>
+						<offset>50</offset>
+					</top>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
+					<size>
+						<height>22</height>
+						<width>18</width>
+					</size>
+				</anchored>
+				<frame>
+					<name>tabs</name>
+				</frame>
+				<tabtopicon>tabtop</tabtopicon>
+			</tabcontrol>
 			<windowreferencecontrol>
 				<bounds>10,-25,40,15</bounds>
 				<icon>
@@ -66,21 +98,6 @@
 					end
 				</script>
 			</windowreferencecontrol>
-
-			<subwindow name="main">
-				<bounds>0,0,-1,-22</bounds>
-				<class>charsheet_main</class>
-			</subwindow>
-			
-			<tabcontrol name="tabs">
-				<bounds>-22,50,18,87</bounds>
-				<tab>
-					<icon>tab_main</icon>
-					<subwindow>main</subwindow>
-				</tab>
-				<activate>1</activate>
-			</tabcontrol>
-		
 			<closebutton_charsheet />
 		</sheetdata>
 	</windowclass>

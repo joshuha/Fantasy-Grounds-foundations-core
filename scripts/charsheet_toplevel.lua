@@ -4,10 +4,23 @@
 --
 
 function onInit()
-	if User.isHost() then
+	User.onIdentityActivation = onIdentityActivation;
+	CharacterSheetManager.populate(self)
+end
+
+-- Close this sheet if the user releases its identity
+function onIdentityActivation(identity, username, activated)
+	if not activated and User.getUsername() == username and identity == getDatabaseNode().getName() then
+		close()
 	end
 end
 
-function onMenuSelection(selection, subselection)
-	
+function onMenuSelection(selection, subselection)	
+
+end
+
+-- callback method for CharacterSheetManager to add sheets to this window
+function addSheet(name, windowclass, tabicon)
+	createControl(windowclass, name)
+	tabs.registerTab(name, tabicon)
 end
