@@ -46,6 +46,10 @@ function onDragEnd(dragdata)
 	end
 end
 
+function onDragStart(button, x, y, dragdata)
+  return onDrag(button, x, y, dragdata);
+end
+
 function onDrag(button, x, y, dragdata)
 	local w, h = getSize();
 	
