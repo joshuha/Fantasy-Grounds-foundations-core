@@ -9,11 +9,7 @@
 	<template name="modulepermissioncontrol">
 		<genericcontrol>
 			<script>
-				function onDrag(button, x, y, draginfo)
-					if dragging then
-						return true;
-					end
-					
+				function onDragStart(button, x, y, draginfo)
 					draginfo.setType("modulepermissions");
 
 					draginfo.setStringData(permissions[1]);
@@ -21,13 +17,11 @@
 					
 					setIcon(nil);
 					
-					dragging = true;
 					return true;
 				end
 				
 				function onDragEnd(draginfo)
 					setIcon(icon[1]);
-					dragging = false;
 				end
 				
 				function onInit()
