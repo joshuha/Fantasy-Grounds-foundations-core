@@ -11,11 +11,23 @@
 			<bounds>0,0,-28,-22</bounds>
 		</subwindow>
 	</template>
+	
+	<template name="charsheet_minisheet">
+		<subwindow>
+			<bounds>0,0,-28,-22</bounds>
+		</subwindow>
+	</template>
 
 	<template name="main_charsheet">
 		<charsheet_sheet>
 			<class>charsheet_main</class>
 		</charsheet_sheet>
+	</template>
+
+	<template name="main_minisheet">
+		<charsheet_minisheet>
+			<class>charsheetmini_main</class>
+		</charsheet_minisheet>
 	</template>
 
 	<windowclass name="charsheet">
@@ -126,72 +138,28 @@
 		<minimize />
 		<nodelete />
 		<playercontrol />
-		<script file="scripts/charsheet_toplevel.lua" />
+		<script file="scripts/charsheetmini_toplevel.lua" />
 		<sheetdata>
-			<genericcontrol name="mini_top_frame">
-				<bounds>10,20,-22,40</bounds>
-				<frame>
-					<name>sheetgroup</name>
-				</frame>
-			</genericcontrol>
-			<stringfield name="name">
-				<font>sheettext</font>
-				<frame>
-					<name>textline</name>
-				</frame>
+			<tabcontrol name="tabs">
 				<anchored>
-					<to>mini_top_frame</to>
-					<position>insidetopleft</position>
-					<offset>15,10</offset>
+					<top>
+						<anchor>top</anchor>
+						<offset>50</offset>
+					</top>
+					<right>
+						<anchor>right</anchor>
+						<offset>-10</offset>
+					</right>
 					<size>
-						<width>120</width>
-						<height>20</height>
+						<height>22</height>
+						<width>18</width>
 					</size>
 				</anchored>
-				<static />
-			</stringfield>
-			
-			<!-- ACTIVATE IDENTITY -->
-			<buttoncontrol>
-				<bounds>-35,30,23,22</bounds>
-				<icon>
-					<normal>button_identityactivate</normal>
-					<pressed>button_identityactivate_down</pressed>
-				</icon>
-				<script>
-					function onInit()
-						if User.isLocal() then
-							setVisible(false);
-						end
-					end
-					
-					function onButtonPress()
-						if User.isLocal() then
-							return;
-						end
-						
-						if User.isHost() then
-							GmIdentityManager.addIdentity(window.name.getValue());
-						else
-							local identityname = window.getDatabaseNode().getName();
-
-							User.setCurrentIdentity(identityname);
-
-							if CampaignRegistry and CampaignRegistry.colortables and CampaignRegistry.colortables[identityname] then
-								local colortable = CampaignRegistry.colortables[identityname];
-								User.setCurrentIdentityColors(colortable.color or "000000", colortable.blacktext or false);
-							end
-						end
-					end
-				</script>
-			</buttoncontrol>
-		
-
-			<subwindow name="main">
-				<bounds>10,50,-22,-1</bounds>
-				<class>charsheetmini_basic</class>
-			</subwindow>
-			
+				<frame>
+					<name>tabs</name>
+				</frame>
+				<tabtopicon>tabtop</tabtopicon>
+			</tabcontrol>
 			
 			<windowreferencecontrol>
 				<bounds>10,-25,40,15</bounds>
@@ -226,15 +194,6 @@
 					end
 				</script>
 			</windowreferencecontrol>
-
-			<tabcontrol name="tabs">
-				<bounds>-22,50,18,291</bounds>
-				<tab>
-					<icon>tab_main</icon>
-					<subwindow>main</subwindow>
-				</tab>
-				<activate>1</activate>
-			</tabcontrol>
 			
 			<closebutton_charsheetmini />
 		</sheetdata>
