@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 
 <!-- 
-  -- Please see the readme.txt file included with this distribution for 
-  -- attribution and copyright information.
+    Please see the readme.txt file included with this distribution for 
+    attribution and copyright information.
   -->
 
 <root version="2.6">
@@ -22,7 +22,7 @@
 		
 			<!-- ACTIVATE IDENTITY -->
 			<buttoncontrol>
-				<bounds>-40,30,23,22</bounds>
+				<bounds>-22,30,23,22</bounds>
 				<icon>
 					<normal>button_identityactivate</normal>
 					<pressed>button_identityactivate_down</pressed>

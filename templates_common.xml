@@ -521,6 +521,7 @@
 			<frame>
 				<name>tabs</name>
 			</frame>
+			<tabtopicon>tabtop</tabtopicon>
 			<script file="scripts/template_tabcontrol.lua" />
 		</genericcontrol>
 	</template>

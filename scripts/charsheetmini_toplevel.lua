@@ -5,7 +5,7 @@
 
 function onInit()
 	User.onIdentityActivation = onIdentityActivation;
-	CharacterSheetManager.populate("main", self)
+	CharacterSheetManager.populate("mini", self)
 end
 
 -- Close this sheet if the user releases its identity
