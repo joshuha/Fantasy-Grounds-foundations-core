@@ -42,6 +42,10 @@ function activateTab(index)
 	end
 end
 
+function getIndex()
+	return tabIndex
+end
+
 function onClickDown(button, x, y)
 	local i = math.ceil(y/TAB_SIZE);
 	
