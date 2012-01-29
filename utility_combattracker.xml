@@ -1562,22 +1562,15 @@
 						setHoverCursor("hand");
 					end
 					
-					function onDrag(button, x, y, draginfo)
-						if dragging then
-							return true;
-						end
-						
+					function onDragStart(button, x, y, draginfo)				
 						draginfo.setType("combattrackeractivation");
 						draginfo.setIcon(activeicon[1]);
 						widget.setVisible(false);
-						
-						dragging = true;
 						return true;
 					end
 					
 					function onDragEnd(draginfo)
 						widget.setVisible(true);
-						dragging = false;
 					end
 				</script>
 			</genericcontrol>
