@@ -23,7 +23,7 @@
 						window.windowlist.window.close();
 					end
 					
-					function onDrag(button, x, y, draginfo)
+					function onDragStart(button, x, y, draginfo)
 						if dragging then
 							return true;
 						end
