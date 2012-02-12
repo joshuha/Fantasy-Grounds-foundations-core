@@ -23,21 +23,13 @@
 						window.windowlist.window.close();
 					end
 					
-					function onDrag(button, x, y, draginfo)
-						if dragging then
-							return true;
-						end
+					function onDragStart(button, x, y, draginfo)
 						
 						draginfo.setType("portraitselection");
 						draginfo.setStringData(getFile());
 						draginfo.setIcon("button_dragtarget");
 						
-						dragging = true;
 						return true;
-					end
-
-					function onDragEnd(draginfo)
-						dragging = false;
 					end
 				</script>
 			</portraitselectioncontrol>
