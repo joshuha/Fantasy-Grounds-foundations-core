@@ -29,7 +29,7 @@
 				end
 			end
 			
-			function onDrag(button, x, y, draginfo)
+			function onDragStart(button, x, y, draginfo)
 				if label.getValue() ~= "" then
 					draginfo.setType("number");
 					draginfo.setDescription(label.getValue());
@@ -91,12 +91,12 @@
 				</droptypes>
 				<gmonly />
 				<script>
-					function onDrag(button, x, y, draginfo)
+					function onDragStart(button, x, y, draginfo)
 						if dragging then
 							return true;
 						end
 						
-						dragging = window.onDrag(button, x, y, draginfo);
+						dragging = window.onDragStart(button, x, y, draginfo);
 						return dragging;
 					end
 
@@ -161,12 +161,12 @@
 				</anchored>
 				<gmonly />
 				<script>
-					function onDrag(button, x, y, draginfo)
+					function onDragStart(button, x, y, draginfo)
 						if dragging then
 							return true;
 						end
 						
-						dragging = window.onDrag(button, x, y, draginfo);
+						dragging = window.onDragStart(button, x, y, draginfo);
 						return true;
 					end
 
