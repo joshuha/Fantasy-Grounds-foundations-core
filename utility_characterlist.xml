@@ -47,7 +47,7 @@
 						return true;
 					end
 
-					function onDrag(button, x, y, draginfo)
+					function onDragStart(button, x, y, draginfo)
 						if User.isHost() then
 							if dragging then
 								return true;
