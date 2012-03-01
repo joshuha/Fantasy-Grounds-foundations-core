@@ -1554,7 +1554,7 @@
 			
 			<!-- FOOTER CONTROLS -->
 			<genericcontrol name="icon_setactive">
-				<bounds>28,-53,33,40</bounds>
+				<bounds>28,-60,33,40</bounds>
 				<activeicon>indicator_ctactive</activeicon>
 				<script>
 					function onInit()
@@ -1575,7 +1575,7 @@
 				</script>
 			</genericcontrol>
 			<buttoncontrol name="advance_actor">
-				<bounds>62,-45,33,26</bounds>
+				<bounds>62,-55,33,26</bounds>
 				<icon>
 					<normal>button_ctnextactor</normal>
 					<pressed>button_ctnextactor_down</pressed>
@@ -1607,7 +1607,7 @@
 			</buttoncontrol>
 
 			<combattrackerffsource name="ffsource_friend">
-				<bounds>200,-43,20,20</bounds>
+				<bounds>200,-52,20,20</bounds>
 				<icon>indicator_ctfffriend</icon>
 				<value>friend</value>
 				<tooltip>
@@ -1615,7 +1615,7 @@
 				</tooltip>
 			</combattrackerffsource>
 			<combattrackerffsource name="ffsource_neutral">
-				<bounds>227,-43,20,20</bounds>
+				<bounds>227,-52,20,20</bounds>
 				<icon>indicator_ctffneutral</icon>
 				<value>neutral</value>
 				<tooltip>
@@ -1623,7 +1623,7 @@
 				</tooltip>
 			</combattrackerffsource>
 			<combattrackerffsource name="ffsource_foe">
-				<bounds>254,-43,20,20</bounds>
+				<bounds>254,-52,20,20</bounds>
 				<icon>indicator_ctfffoe</icon>
 				<value>foe</value>
 				<tooltip>
@@ -1632,7 +1632,7 @@
 			</combattrackerffsource>
 			
 			<buttoncontrol name="button_menu">
-				<bounds>-210,-40,40,15</bounds>
+				<bounds>-210,-50,40,15</bounds>
 				<icon>
 					<normal>button_menu</normal>
 					<pressed>button_menu_down</pressed>
@@ -1699,7 +1699,7 @@
 					</right>
 					<top>
 						<anchor>bottom</anchor>
-						<offset>-39</offset>
+						<offset>-50</offset>
 					</top>
 					<size>
 						<width>50</width>
