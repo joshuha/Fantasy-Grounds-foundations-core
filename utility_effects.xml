@@ -46,7 +46,7 @@
 				return rEffect;
 			end
 			
-			function onDrag(button, x, y, draginfo)
+			function onDragStart(button, x, y, draginfo)
 				return RulesManager.dragEffect(draginfo, nil, getEffectStructure());
 			end
 			
@@ -106,12 +106,12 @@
 				<gmonly />
 				<script>
 										
-					function onDrag(button, x, y, draginfo)
+					function onDragStart(button, x, y, draginfo)
 						if dragging then
 							return true;
 						end
 						
-						dragging = window.onDrag(button, x, y, draginfo);
+						dragging = window.onDragStart(button, x, y, draginfo);
 						return true;
 					end
 
@@ -190,12 +190,12 @@
 				</anchored>
 				<gmonly />
 				<script>
-					function onDrag(button, x, y, draginfo)
+					function onDragStart(button, x, y, draginfo)
 						if dragging then
 							return true;
 						end
 						
-						dragging = window.onDrag(button, x, y, draginfo);
+						dragging = window.onDragStart(button, x, y, draginfo);
 						return true;
 					end
 
